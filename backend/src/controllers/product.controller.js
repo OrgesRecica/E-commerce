@@ -1,11 +1,30 @@
 import Product from '../models/Product.js';
-import { uploadBuffer } from '../services/upload.service.js';
+import { uploadBuffer, destroyAsset } from '../services/upload.service.js';
+
+function slugify(input) {
+  return String(input)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60);
+}
+
+async function uniqueSlug(base) {
+  let slug = base || 'product';
+  if (!(await Product.exists({ slug }))) return slug;
+  for (let i = 0; i < 5; i++) {
+    const candidate = `${base}-${Math.random().toString(36).slice(2, 7)}`;
+    if (!(await Product.exists({ slug: candidate }))) return candidate;
+  }
+  return `${base}-${Date.now().toString(36)}`;
+}
 
 export async function listProducts(req, res, next) {
   try {
     const { q, category, featured, page = 1, limit = 20 } = req.query;
     const filter = {};
-    if (category) filter.category = category;
+    if (category) filter.category = String(category).toLowerCase();
     if (featured === 'true') filter.featured = true;
     if (q) filter.$text = { $search: q };
     const skip = (Number(page) - 1) * Number(limit);
@@ -32,8 +51,35 @@ export async function getProduct(req, res, next) {
 export async function createProduct(req, res, next) {
   try {
     const files = req.files || [];
-    const uploads = await Promise.all(files.map((f) => uploadBuffer(f.buffer, 'products')));
-    const product = await Product.create({ ...req.body, images: uploads });
+    const title = String(req.body.title ?? req.body.name ?? '').trim();
+    const description = String(req.body.description ?? '').trim();
+    const category = String(req.body.category ?? '').trim().toLowerCase();
+    const price = Number(req.body.price);
+
+    if (!title) return res.status(400).json({ message: 'Name is required' });
+    if (!description) return res.status(400).json({ message: 'Description is required' });
+    if (!category) return res.status(400).json({ message: 'Category is required' });
+    if (!Number.isFinite(price) || price < 0) {
+      return res.status(400).json({ message: 'Price must be a non-negative number' });
+    }
+    if (!files.length) return res.status(400).json({ message: 'At least one image is required' });
+
+    const uploads = await Promise.all(
+      files.map((f) => uploadBuffer(f.buffer, 'products', f.originalname))
+    );
+
+    const slug = await uniqueSlug(slugify(title));
+    const stock = Number(req.body.stock);
+    const product = await Product.create({
+      title,
+      slug,
+      description,
+      category,
+      price,
+      stock: Number.isFinite(stock) ? stock : 1,
+      featured: req.body.featured === 'true' || req.body.featured === true,
+      images: uploads,
+    });
     res.status(201).json(product);
   } catch (err) {
     next(err);
@@ -42,7 +88,14 @@ export async function createProduct(req, res, next) {
 
 export async function updateProduct(req, res, next) {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const update = { ...req.body };
+    if (update.name && !update.title) {
+      update.title = update.name;
+      delete update.name;
+    }
+    if (update.category) update.category = String(update.category).toLowerCase();
+    if (update.price != null) update.price = Number(update.price);
+    const product = await Product.findByIdAndUpdate(req.params.id, update, { new: true });
     if (!product) return res.status(404).json({ message: 'Product not found' });
     res.json(product);
   } catch (err) {
@@ -54,6 +107,7 @@ export async function deleteProduct(req, res, next) {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) return res.status(404).json({ message: 'Product not found' });
+    await Promise.all((product.images || []).map((img) => destroyAsset(img.publicId)));
     res.json({ ok: true });
   } catch (err) {
     next(err);

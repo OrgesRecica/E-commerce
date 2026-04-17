@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import path from 'path';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -16,8 +17,9 @@ import contactRoutes from './src/routes/contact.routes.js';
 
 const app = express();
 
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')));
 app.use(morgan('dev'));
 
 app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));

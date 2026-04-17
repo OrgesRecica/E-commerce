@@ -64,6 +64,18 @@ export default function Navbar() {
                 {l.label}
               </NavLink>
             ))}
+            {user?.role === 'admin' && (
+              <NavLink
+                to="/admin"
+                className={({ isActive }) =>
+                  `px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                    isActive ? 'text-lime' : 'text-bone/70 hover:text-bone'
+                  }`
+                }
+              >
+                Admin
+              </NavLink>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
