@@ -21,6 +21,9 @@ const orderSchema = new mongoose.Schema(
       default: 'pending',
     },
     shippingAddress: {
+      fullName: String,
+      email: String,
+      phone: String,
       line1: String,
       city: String,
       postalCode: String,

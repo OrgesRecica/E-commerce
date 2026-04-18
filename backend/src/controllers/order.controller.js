@@ -37,6 +37,28 @@ export async function listMyOrders(req, res, next) {
   }
 }
 
+export async function listAllOrders(req, res, next) {
+  try {
+    const orders = await Order.find()
+      .populate('userId', 'name email')
+      .sort({ createdAt: -1 });
+    res.json(orders);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateOrderStatus(req, res, next) {
+  try {
+    const { status } = req.body;
+    const order = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true });
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+    res.json(order);
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function getOrder(req, res, next) {
   try {
     const order = await Order.findById(req.params.id);

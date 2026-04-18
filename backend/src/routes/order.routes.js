@@ -1,12 +1,14 @@
 import { Router } from 'express';
-import { createOrder, listMyOrders, getOrder } from '../controllers/order.controller.js';
-import { requireAuth } from '../middleware/auth.js';
+import { createOrder, listMyOrders, getOrder, listAllOrders, updateOrderStatus } from '../controllers/order.controller.js';
+import { requireAuth, requireAdmin } from '../middleware/auth.js';
 
 const router = Router();
 
 router.use(requireAuth);
 router.post('/', createOrder);
 router.get('/', listMyOrders);
+router.get('/admin/all', requireAdmin, listAllOrders);
+router.patch('/:id/status', requireAdmin, updateOrderStatus);
 router.get('/:id', getOrder);
 
 export default router;

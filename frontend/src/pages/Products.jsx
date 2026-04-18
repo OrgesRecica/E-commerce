@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../api/axios.js';
 import ProductCard from '../components/ProductCard.jsx';
@@ -22,6 +22,24 @@ export default function Products() {
     queryKey: ['products', q, category, sort],
     queryFn: async () => (await api.get('/products', { params: { q, category: category === 'All' ? '' : category.toLowerCase(), sort } })).data,
   });
+
+  // Re-run reveal after products load since cards render after initial mount
+  useEffect(() => {
+    if (!data) return;
+    const els = document.querySelectorAll('.reveal:not(.is-visible)');
+    if (!('IntersectionObserver' in window)) { els.forEach((el) => el.classList.add('is-visible')); return; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const delay = entry.target.dataset.delay || 0;
+          setTimeout(() => entry.target.classList.add('is-visible'), Number(delay));
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [data]);
 
   return (
     <div className="pt-32 pb-24">

@@ -14,14 +14,9 @@ export default function Cart() {
   const shipping = subtotal > 150 || subtotal === 0 ? 0 : 12;
   const total = subtotal + shipping;
 
-  const checkout = async () => {
+  const checkout = () => {
     if (!user) return navigate('/login');
-    const order = await api.post('/orders', {
-      items: items.map((i) => ({ product: i.productId, quantity: i.quantity })),
-    });
-    const intent = await api.post('/payments/intent', { orderId: order.data._id });
-    alert(`Order created. Client secret: ${intent.data.clientSecret}`);
-    dispatch(clear());
+    navigate('/checkout', { state: { items, total } });
   };
 
   if (items.length === 0) {
