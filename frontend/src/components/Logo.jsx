@@ -32,7 +32,7 @@ export default function Logo({ size = 36, showText = true, textSize = 'text-base
       </svg>
 
       {showText && (
-        <span className={`font-semibold tracking-[0.18em] uppercase leading-none ${textSize} ${textColor}`}>
+        <span className={`font-medium tracking-[0.14em] uppercase leading-none ${textSize} ${textColor}`}>
           SCAMPA
         </span>
       )}

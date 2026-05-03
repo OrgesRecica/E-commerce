@@ -53,7 +53,7 @@ export default function Contact() {
       {/* ──────────── HEADER ──────────── */}
       <section className="page-top pb-12">
         <div className="container mx-auto px-5 max-w-[88rem]">
-          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-muted mb-10 reveal">
+          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-muted mb-10 reveal">
             <Link to="/" className="link-underline">Home</Link>
             <span>/</span>
             <span className="text-bone">Contact</span>
@@ -89,9 +89,9 @@ export default function Contact() {
                 data-delay={i * 80}
                 data-cursor="hover"
               >
-                <p className="text-xs uppercase tracking-[0.32em] text-muted group-hover:text-lime transition mb-6">{ch.t}</p>
+                <p className="text-xs uppercase tracking-[0.24em] text-muted group-hover:text-orange transition mb-6">{ch.t}</p>
                 <p className="text-base text-bone group-hover:text-white transition mb-8 leading-relaxed flex-1">{ch.d}</p>
-                <p className="text-sm font-medium text-bone group-hover:text-lime transition link-underline">{ch.c} →</p>
+                <p className="text-sm font-medium text-bone group-hover:text-orange transition link-underline">{ch.c} →</p>
               </a>
             ))}
           </div>
@@ -117,7 +117,7 @@ export default function Contact() {
               </div>
 
               <label className="block">
-                <span className="text-xs uppercase tracking-[0.28em] text-muted">Subject *</span>
+                <span className="text-xs uppercase tracking-[0.22em] text-muted">Subject *</span>
                 <select
                   value={form.subject}
                   onChange={(e) => setForm({ ...form, subject: e.target.value })}
@@ -132,7 +132,7 @@ export default function Contact() {
               </label>
 
               <label className="block">
-                <span className="text-xs uppercase tracking-[0.28em] text-muted">Message *</span>
+                <span className="text-xs uppercase tracking-[0.22em] text-muted">Message *</span>
                 <textarea
                   required
                   rows="6"
@@ -156,7 +156,7 @@ export default function Contact() {
                     </svg>
                   </button>
                 </Magnetic>
-                {status === 'sent' && <span className="text-sm text-sage">— Sent. We'll respond within 24 hours.</span>}
+                {status === 'sent' && <span className="text-sm text-violet">— Sent. We'll respond within 24 hours.</span>}
                 {status === 'error' && <span className="text-sm text-coral">— Something went wrong. Please try again.</span>}
               </div>
             </div>
@@ -165,7 +165,7 @@ export default function Contact() {
           {/* Info */}
           <aside className="lg:col-span-5 lg:pl-12 lg:border-l border-black/10 space-y-12 reveal" data-effect="right">
             <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-muted mb-4">Headquarters</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-muted mb-4">Headquarters</p>
               <p className="kinetic text-2xl font-medium text-bone tracking-normal">
                 Industrial Business Park
               </p>
@@ -173,13 +173,13 @@ export default function Contact() {
             </div>
 
             <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-muted mb-4">Phone lines</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-muted mb-4">Phone lines</p>
               <ul className="space-y-2">
                 {phones.map((p) => (
                   <li key={p.number}>
                     <a href={`tel:${p.number.replace(/\s/g, '')}`} className="flex justify-between gap-4 group">
                       <span className="text-base font-medium text-bone tabular link-underline">{p.number}</span>
-                      <span className="text-xs uppercase tracking-[0.28em] text-muted">{p.label}</span>
+                      <span className="text-xs uppercase tracking-[0.22em] text-muted">{p.label}</span>
                     </a>
                   </li>
                 ))}
@@ -187,19 +187,19 @@ export default function Contact() {
             </div>
 
             <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-muted mb-4">Email</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-muted mb-4">Email</p>
               <a href="mailto:info@scampa.eu" className="kinetic text-2xl font-medium text-bone tracking-normal link-underline">
                 info@scampa.eu
               </a>
-              <p className="mt-2 text-xs uppercase tracking-[0.28em] text-muted">Response within 24h</p>
+              <p className="mt-2 text-xs uppercase tracking-[0.22em] text-muted">Response within 24h</p>
             </div>
 
             <div className="pt-8 border-t border-black/10">
-              <p className="text-xs uppercase tracking-[0.28em] text-muted mb-4">Certifications</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-muted mb-4">Certifications</p>
               <div className="flex flex-wrap gap-3">
-                <span className="px-3 py-1 border border-black/15 text-xs uppercase tracking-[0.18em] text-bone">ISO 9001</span>
-                <span className="px-3 py-1 border border-black/15 text-xs uppercase tracking-[0.18em] text-bone">100% Recycled</span>
-                <span className="px-3 py-1 border border-black/15 text-xs uppercase tracking-[0.18em] text-bone">EU Export</span>
+                <span className="px-3 py-1 border border-black/15 text-xs uppercase tracking-[0.14em] text-bone">ISO 9001</span>
+                <span className="px-3 py-1 border border-black/15 text-xs uppercase tracking-[0.14em] text-bone">100% Recycled</span>
+                <span className="px-3 py-1 border border-black/15 text-xs uppercase tracking-[0.14em] text-bone">EU Export</span>
               </div>
             </div>
           </aside>
@@ -238,7 +238,7 @@ export default function Contact() {
 function Field({ label, ...props }) {
   return (
     <label className="block">
-      <span className="text-xs uppercase tracking-[0.28em] text-muted">{label}</span>
+      <span className="text-xs uppercase tracking-[0.22em] text-muted">{label}</span>
       <input
         {...props}
         className="mt-3 w-full h-12 bg-transparent border-b border-black/15 focus:border-bone outline-none text-bone"

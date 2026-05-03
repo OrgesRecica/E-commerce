@@ -31,7 +31,7 @@ export default function About() {
       {/* ════════════════ HEADER (light, integrated, no big navy block) ════════════════ */}
       <section className="page-top pb-12">
         <div className="container mx-auto px-5 max-w-[88rem]">
-          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-muted mb-10 reveal">
+          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-muted mb-10 reveal">
             <Link to="/" className="link-underline">Home</Link>
             <span>/</span>
             <span className="text-bone">About</span>
@@ -52,7 +52,7 @@ export default function About() {
                 high-quality, sustainable garbage bags and flexible packaging made from
                 100% recycled materials.
               </p>
-              <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-xs uppercase tracking-[0.28em] text-muted">
+              <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-xs uppercase tracking-[0.22em] text-muted">
                 <span>ISO 9001</span>
                 <span>·</span>
                 <span>Drenas, KS</span>
@@ -70,7 +70,7 @@ export default function About() {
           <div className="reveal img-mask aspect-[16/8] w-full" data-effect="mask">
             <img src="https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?w=2200&q=85" alt="SCAMPA factory" className="w-full h-full object-cover" />
           </div>
-          <div className="mt-5 flex items-center justify-between text-xs uppercase tracking-[0.28em] text-muted">
+          <div className="mt-5 flex items-center justify-between text-xs uppercase tracking-[0.22em] text-muted">
             <span>— Manufacturing facility</span>
             <span>Industrial Business Park · Drenas</span>
           </div>
@@ -144,7 +144,7 @@ export default function About() {
                 className="reveal bg-ink-800 hover:bg-white transition-colors duration-700 p-10 group"
                 data-delay={i * 100}
               >
-                <div className="text-xs uppercase tracking-[0.32em] text-muted mb-12 group-hover:text-lime transition">
+                <div className="text-xs uppercase tracking-[0.24em] text-muted mb-12 group-hover:text-orange transition">
                   N° {p.n}
                 </div>
                 <h3 className="kinetic text-2xl font-medium tracking-normal text-bone mb-4">{p.t}</h3>
@@ -197,10 +197,10 @@ export default function About() {
       <section className="py-32 bg-bone text-white relative overflow-hidden">
         <div className="container mx-auto px-5 max-w-[88rem] grid lg:grid-cols-12 gap-12 items-end">
           <div className="lg:col-span-7">
-            <p className="text-xs uppercase tracking-[0.32em] text-white/50 mb-6 reveal">N° 04 — Joint venture</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-white/50 mb-6 reveal">N° 04 — Joint venture</p>
             <h2 className="kinetic text-display-lg leading-[0.95] reveal">
               <span className="line-mask"><span>Powerpack LLC</span></span>
-              <span className="line-mask"><span><em className="text-lime">100% EU exports</em>.</span></span>
+              <span className="line-mask"><span><em className="text-orange">100% EU exports</em>.</span></span>
             </h2>
             <p className="mt-10 text-lg text-white/70 leading-relaxed max-w-xl reveal" data-delay="100">
               Established October 2019, Powerpack LLC is our joint venture with Powerpack NV
@@ -222,7 +222,7 @@ export default function About() {
             <div className="border border-white/20 p-8 lg:p-10">
               <div className="flex items-baseline justify-between mb-10 pb-6 border-b border-white/10">
                 <h3 className="text-2xl font-medium tracking-normal">Powerpack LLC</h3>
-                <span className="text-xs uppercase tracking-[0.32em] text-lime">2019 →</span>
+                <span className="text-xs uppercase tracking-[0.24em] text-orange">2019 →</span>
               </div>
               <dl className="space-y-5">
                 {[
@@ -233,7 +233,7 @@ export default function About() {
                   ['Products',    'Drawtape · Bottom-seal · Wavetop'],
                 ].map(([k, v]) => (
                   <div key={k} className="flex justify-between gap-6 text-sm">
-                    <dt className="text-white/50 uppercase tracking-[0.18em] text-xs">{k}</dt>
+                    <dt className="text-white/50 uppercase tracking-[0.14em] text-xs">{k}</dt>
                     <dd className="text-right">{v}</dd>
                   </div>
                 ))}
@@ -265,7 +265,7 @@ export default function About() {
               { n: '03', t: 'Multilayer tech',    d: 'Advanced film technology reduces prime resin without compromising durability.' },
             ].map((s, i) => (
               <div key={s.t} className="reveal" data-delay={i * 100}>
-                <div className="text-7xl font-light tracking-normal text-lime mb-6 tabular">{s.n}</div>
+                <div className="text-7xl font-light tracking-normal text-orange mb-6 tabular">{s.n}</div>
                 <h3 className="text-xl font-medium tracking-normal text-bone mb-3">{s.t}</h3>
                 <p className="text-sm text-bone-300 leading-relaxed">{s.d}</p>
               </div>

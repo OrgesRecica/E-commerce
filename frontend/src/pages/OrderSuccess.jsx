@@ -32,7 +32,7 @@ export default function OrderSuccess() {
   return (
     <section className="page-top pb-32">
       <div className="container mx-auto px-5 max-w-[88rem]">
-        <div className="flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-muted mb-12">
+        <div className="flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-muted mb-12">
           <Link to="/" className="link-underline">Home</Link>
           <span>/</span>
           <span className="text-bone">{status === 'error' ? 'Issue' : 'Confirmation'}</span>
@@ -51,7 +51,7 @@ export default function OrderSuccess() {
           <>
             <p className="section-mark mb-6">{status === 'processing' ? 'Processing' : 'Confirmed'}</p>
             <h1 className="kinetic text-display-2xl text-bone mb-10">
-              <span className="line-mask"><span>Thank you. <em className="text-lime">Order received</em>.</span></span>
+              <span className="line-mask"><span>Thank you. <em className="text-orange">Order received</em>.</span></span>
             </h1>
             <p className="text-bone-300 leading-relaxed max-w-2xl mb-16 text-lg">
               {status === 'processing'
@@ -65,7 +65,7 @@ export default function OrderSuccess() {
             </div>
 
             <div className="pt-10 border-t border-black/10 max-w-md">
-              <p className="text-xs uppercase tracking-[0.28em] text-muted mb-2">Reference</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-muted mb-2">Reference</p>
               <p className="text-bone font-mono text-sm tracking-normal">{paymentIntentId?.slice(-12)}</p>
             </div>
           </>

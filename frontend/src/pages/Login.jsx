@@ -44,9 +44,9 @@ export default function Login() {
             <Logo size={48} textSize="text-2xl" variant="light" />
           </Link>
           <div>
-            <p className="text-xs uppercase tracking-[0.32em] text-lime mb-6">Manufacturing & Trading Co.</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-orange mb-6">Manufacturing & Trading Co.</p>
             <blockquote className="kinetic text-3xl lg:text-4xl font-light leading-tight tracking-normal">
-              "SCAMPA values <em className="text-lime">long-term relationships</em>,
+              "SCAMPA values <em className="text-orange">long-term relationships</em>,
               treating clients as partners."
             </blockquote>
             <div className="mt-12 flex items-center gap-4 pt-6 border-t border-white/20">
@@ -65,12 +65,12 @@ export default function Login() {
           <p className="section-mark mb-6">Welcome back</p>
           <h1 className="kinetic text-display-md text-bone mb-3">Sign in</h1>
           <p className="text-bone-300 mb-12">
-            New here? <Link to="/register" className="text-lime link-underline font-medium">Create an account</Link>
+            New here? <Link to="/register" className="text-orange link-underline font-medium">Create an account</Link>
           </p>
 
           <form onSubmit={submit} className="space-y-8">
             <label className="block">
-              <span className="text-xs uppercase tracking-[0.28em] text-muted">Email</span>
+              <span className="text-xs uppercase tracking-[0.22em] text-muted">Email</span>
               <input
                 required type="email"
                 value={form.email}
@@ -79,7 +79,7 @@ export default function Login() {
               />
             </label>
             <label className="block">
-              <span className="text-xs uppercase tracking-[0.28em] text-muted">Password</span>
+              <span className="text-xs uppercase tracking-[0.22em] text-muted">Password</span>
               <input
                 required type="password"
                 value={form.password}
@@ -90,9 +90,9 @@ export default function Login() {
 
             <div className="flex items-center justify-between text-sm">
               <label className="flex items-center gap-2 text-bone-300">
-                <input type="checkbox" className="accent-lime" /> Remember me
+                <input type="checkbox" className="accent-orange" /> Remember me
               </label>
-              <a href="#" className="text-bone-300 hover:text-lime transition link-underline">Forgot?</a>
+              <a href="#" className="text-bone-300 hover:text-orange transition link-underline">Forgot?</a>
             </div>
 
             {error && <div className="text-sm text-coral">— {error}</div>}
@@ -105,7 +105,7 @@ export default function Login() {
           </form>
 
           <div className="mt-12 pt-12 border-t border-black/10">
-            <p className="text-xs uppercase tracking-[0.28em] text-muted mb-4">Or continue with</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-muted mb-4">Or continue with</p>
             <div className="grid grid-cols-2 gap-3">
               <button className="h-12 border border-black/15 hover:border-bone transition text-sm font-medium text-bone">Google</button>
               <button className="h-12 border border-black/15 hover:border-bone transition text-sm font-medium text-bone">Microsoft</button>

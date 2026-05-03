@@ -23,7 +23,7 @@ export default function Cart() {
     <>
       <section className="page-top pb-12">
         <div className="container mx-auto px-5 max-w-[88rem]">
-          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-muted mb-10 reveal">
+          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-muted mb-10 reveal">
             <Link to="/" className="link-underline">Home</Link>
             <span>/</span>
             <span className="text-bone">Cart</span>
@@ -75,7 +75,7 @@ export default function Cart() {
                       </div>
                       <button
                         onClick={() => dispatch(removeItem(i.productId))}
-                        className="text-muted hover:text-coral transition link-underline text-xs uppercase tracking-[0.28em]"
+                        className="text-muted hover:text-coral transition link-underline text-xs uppercase tracking-[0.22em]"
                         aria-label="Remove"
                       >
                         Remove
@@ -86,12 +86,12 @@ export default function Cart() {
                       <div className="inline-flex items-center border border-black/15">
                         <button
                           onClick={() => dispatch(updateQty({ productId: i.productId, quantity: i.quantity - 1 }))}
-                          className="w-9 h-9 grid place-items-center text-bone hover:text-lime"
+                          className="w-9 h-9 grid place-items-center text-bone hover:text-orange"
                         >−</button>
                         <span className="w-10 text-center text-sm font-medium text-bone tabular">{i.quantity}</span>
                         <button
                           onClick={() => dispatch(updateQty({ productId: i.productId, quantity: i.quantity + 1 }))}
-                          className="w-9 h-9 grid place-items-center text-bone hover:text-lime"
+                          className="w-9 h-9 grid place-items-center text-bone hover:text-orange"
                         >+</button>
                       </div>
                       <span className="text-lg font-medium text-bone tabular">€{(i.price * i.quantity).toFixed(2)}</span>
@@ -104,7 +104,7 @@ export default function Cart() {
             {/* Summary */}
             <aside className="lg:col-span-4 reveal" data-effect="right">
               <div className="sticky top-32 lg:pl-12 lg:border-l border-black/10">
-                <p className="text-xs uppercase tracking-[0.32em] text-muted mb-6">Summary</p>
+                <p className="text-xs uppercase tracking-[0.24em] text-muted mb-6">Summary</p>
                 <dl className="space-y-4 text-sm pb-6 border-b border-black/10">
                   <div className="flex justify-between"><dt className="text-bone-300">Subtotal</dt><dd className="text-bone tabular">€{subtotal.toFixed(2)}</dd></div>
                   <div className="flex justify-between"><dt className="text-bone-300">Shipping</dt><dd className="text-bone tabular">{shipping === 0 ? 'Free' : `€${shipping.toFixed(2)}`}</dd></div>
@@ -131,7 +131,7 @@ export default function Cart() {
                       </svg>
                     </button>
                   </Magnetic>
-                  <button onClick={() => dispatch(clear())} className="text-xs uppercase tracking-[0.28em] text-muted hover:text-coral transition link-underline">
+                  <button onClick={() => dispatch(clear())} className="text-xs uppercase tracking-[0.22em] text-muted hover:text-coral transition link-underline">
                     Clear cart
                   </button>
                 </div>

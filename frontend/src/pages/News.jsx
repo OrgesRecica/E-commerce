@@ -42,7 +42,7 @@ export default function News() {
       {/* ──────────── MASTHEAD ──────────── */}
       <section className="page-top pb-12">
         <div className="container mx-auto px-5 max-w-[88rem]">
-          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-muted mb-10 reveal">
+          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-muted mb-10 reveal">
             <Link to="/" className="link-underline">Home</Link>
             <span>/</span>
             <span className="text-bone">Journal</span>
@@ -74,9 +74,9 @@ export default function News() {
             </div>
             <div className="lg:col-span-5 order-1 lg:order-2">
               <div className="flex items-center gap-4 mb-6">
-                <span className="px-3 py-1 border border-black/15 text-xs uppercase tracking-[0.28em] text-bone">{hero.tag}</span>
-                <span className="text-xs uppercase tracking-[0.28em] text-muted tabular">{hero.date}</span>
-                <span className="text-xs uppercase tracking-[0.28em] text-lime">Featured</span>
+                <span className="px-3 py-1 border border-black/15 text-xs uppercase tracking-[0.22em] text-bone">{hero.tag}</span>
+                <span className="text-xs uppercase tracking-[0.22em] text-muted tabular">{hero.date}</span>
+                <span className="text-xs uppercase tracking-[0.22em] text-orange">Featured</span>
               </div>
               <h2 className="kinetic text-display-md text-bone leading-tight tracking-normal mb-6">
                 {hero.title}
@@ -98,7 +98,7 @@ export default function News() {
             <h2 className="kinetic text-display-md text-bone reveal">
               <span className="line-mask"><span>More <em>stories</em>.</span></span>
             </h2>
-            <p className="text-xs uppercase tracking-[0.28em] text-muted reveal">{rest.length} entries</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-muted reveal">{rest.length} entries</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-px bg-black/10">
@@ -113,14 +113,14 @@ export default function News() {
                   <img src={article.img} alt={article.title} className="w-full h-full object-cover" />
                 </div>
                 <div className="flex items-center gap-4 mb-4">
-                  <span className="px-3 py-1 border border-black/15 text-[10px] uppercase tracking-[0.28em] text-bone">{article.tag}</span>
-                  <span className="text-xs uppercase tracking-[0.28em] text-muted tabular">{article.date}</span>
+                  <span className="px-3 py-1 border border-black/15 text-[10px] uppercase tracking-[0.22em] text-bone">{article.tag}</span>
+                  <span className="text-xs uppercase tracking-[0.22em] text-muted tabular">{article.date}</span>
                 </div>
-                <h3 className="kinetic text-2xl md:text-3xl font-medium text-bone leading-tight tracking-normal mb-4 group-hover:text-lime transition-colors">
+                <h3 className="kinetic text-2xl md:text-3xl font-medium text-bone leading-tight tracking-normal mb-4 group-hover:text-orange transition-colors">
                   {article.title}
                 </h3>
                 <p className="text-bone-300 leading-relaxed mb-6 line-clamp-3 text-sm">{article.excerpt}</p>
-                <span className="text-sm font-medium text-bone link-underline group-hover:text-lime transition">Read more →</span>
+                <span className="text-sm font-medium text-bone link-underline group-hover:text-orange transition">Read more →</span>
               </article>
             ))}
           </div>

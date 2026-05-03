@@ -17,18 +17,18 @@ const STATUS_OPTIONS = ['pending', 'paid', 'shipped', 'delivered', 'cancelled'];
 
 const STATUS_STYLE = {
   pending:   'text-amber-700  bg-amber-50  border-amber-200',
-  paid:      'text-emerald-700 bg-emerald-50 border-emerald-200',
+  paid:      'text-orange     bg-orange/10 border-orange/30',
   shipped:   'text-blue-700   bg-blue-50   border-blue-200',
-  delivered: 'text-sage       bg-sage/10   border-sage/40',
+  delivered: 'text-violet     bg-violet/10 border-violet/30',
   cancelled: 'text-coral      bg-red-50    border-red-200',
 };
 
 function StatCard({ label, value, sub }) {
   return (
     <div className="p-8 bg-white border border-black/10">
-      <p className="text-xs uppercase tracking-[0.32em] text-muted mb-3">{label}</p>
+      <p className="text-xs uppercase tracking-[0.24em] text-muted mb-3">{label}</p>
       <p className="text-4xl lg:text-5xl font-light text-bone tabular tracking-normal">{value}</p>
-      {sub && <p className="text-xs uppercase tracking-[0.28em] text-muted mt-3">{sub}</p>}
+      {sub && <p className="text-xs uppercase tracking-[0.22em] text-muted mt-3">{sub}</p>}
     </div>
   );
 }
@@ -38,12 +38,12 @@ function NavItem({ label, active, onClick }) {
     <button
       onClick={onClick}
       className={`w-full text-left py-3 text-sm font-medium tracking-normal transition-colors border-b border-black/5 ${
-        active ? 'text-lime' : 'text-bone hover:text-lime'
+        active ? 'text-orange' : 'text-bone hover:text-orange'
       }`}
     >
       <span className="flex items-center justify-between">
         {label}
-        <span className={`block w-4 h-px transition-all ${active ? 'bg-lime w-8' : 'bg-bone/20'}`} />
+        <span className={`block w-4 h-px transition-all ${active ? 'bg-orange w-8' : 'bg-bone/20'}`} />
       </span>
     </button>
   );
@@ -137,7 +137,7 @@ export default function Admin() {
       <aside className="w-64 shrink-0 border-r border-black/10 bg-white flex flex-col p-8 gap-2 sticky top-24 h-[calc(100vh-6rem)] overflow-auto">
         <div className="mb-8 pb-6 border-b border-black/10">
           <Logo size={32} textSize="text-base" />
-          <p className="mt-4 text-[10px] uppercase tracking-[0.32em] text-lime">Admin Panel</p>
+          <p className="mt-4 text-[10px] uppercase tracking-[0.24em] text-orange">Admin Panel</p>
           <p className="text-xs text-muted truncate mt-1">{user.email}</p>
         </div>
 
@@ -147,7 +147,7 @@ export default function Admin() {
         <NavItem label="Add product" active={tab === 'create'}  onClick={() => setTab('create')} />
 
         <div className="mt-auto pt-6 border-t border-black/10">
-          <a href="/" className="text-xs uppercase tracking-[0.28em] text-muted hover:text-lime transition link-underline">
+          <a href="/" className="text-xs uppercase tracking-[0.22em] text-muted hover:text-orange transition link-underline">
             ← Back to store
           </a>
         </div>
@@ -172,7 +172,7 @@ export default function Admin() {
 
             <div className="grid md:grid-cols-2 gap-px bg-black/10">
               <div className="p-8 bg-white">
-                <h2 className="text-xs uppercase tracking-[0.32em] text-muted mb-6">Orders by status</h2>
+                <h2 className="text-xs uppercase tracking-[0.24em] text-muted mb-6">Orders by status</h2>
                 <div className="space-y-4">
                   {STATUS_OPTIONS.map((s) => {
                     const count = stats?.ordersByStatus?.[s] || 0;
@@ -184,7 +184,7 @@ export default function Admin() {
                           <span className="text-bone tabular font-medium">{count}</span>
                         </div>
                         <div className="h-px bg-black/10">
-                          <div className="h-full bg-lime transition-all" style={{ width: `${(count / total) * 100}%` }} />
+                          <div className="h-full bg-orange transition-all" style={{ width: `${(count / total) * 100}%` }} />
                         </div>
                       </div>
                     );
@@ -193,7 +193,7 @@ export default function Admin() {
               </div>
 
               <div className="p-8 bg-white">
-                <h2 className="text-xs uppercase tracking-[0.32em] text-muted mb-6">Recent orders</h2>
+                <h2 className="text-xs uppercase tracking-[0.24em] text-muted mb-6">Recent orders</h2>
                 <div className="space-y-4">
                   {stats?.recentOrders?.length ? stats.recentOrders.map((o) => (
                     <div key={o._id} className="flex items-center justify-between gap-3 py-3 border-b border-black/10 last:border-0">
@@ -209,7 +209,7 @@ export default function Admin() {
                   )) : <p className="text-sm text-muted">No orders yet.</p>}
                 </div>
                 {(stats?.recentOrders?.length > 0) && (
-                  <button onClick={() => setTab('orders')} className="mt-6 text-xs uppercase tracking-[0.28em] text-lime link-underline">View all →</button>
+                  <button onClick={() => setTab('orders')} className="mt-6 text-xs uppercase tracking-[0.22em] text-orange link-underline">View all →</button>
                 )}
               </div>
             </div>
@@ -235,7 +235,7 @@ export default function Admin() {
                       <div className="space-y-2 min-w-0 flex-1">
                         <div className="flex items-center gap-3 flex-wrap">
                           <span className="font-mono text-xs text-muted">#{order._id.slice(-8).toUpperCase()}</span>
-                          <span className={`text-[10px] uppercase tracking-[0.28em] px-2 py-0.5 border capitalize ${STATUS_STYLE[order.status]}`}>{order.status}</span>
+                          <span className={`text-[10px] uppercase tracking-[0.22em] px-2 py-0.5 border capitalize ${STATUS_STYLE[order.status]}`}>{order.status}</span>
                           <span className="text-xs text-muted">{fmtDate(order.createdAt)}</span>
                         </div>
                         <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
@@ -297,11 +297,11 @@ export default function Admin() {
               <table className="w-full text-sm">
                 <thead className="border-b border-black/10">
                   <tr>
-                    <th className="text-left px-6 py-5 text-[11px] uppercase tracking-[0.28em] text-muted font-medium">Product</th>
-                    <th className="text-left px-6 py-5 text-[11px] uppercase tracking-[0.28em] text-muted font-medium hidden md:table-cell">Category</th>
-                    <th className="text-left px-6 py-5 text-[11px] uppercase tracking-[0.28em] text-muted font-medium">Price</th>
-                    <th className="text-left px-6 py-5 text-[11px] uppercase tracking-[0.28em] text-muted font-medium hidden sm:table-cell">Stock</th>
-                    <th className="text-left px-6 py-5 text-[11px] uppercase tracking-[0.28em] text-muted font-medium hidden sm:table-cell">Featured</th>
+                    <th className="text-left px-6 py-5 text-[11px] uppercase tracking-[0.22em] text-muted font-medium">Product</th>
+                    <th className="text-left px-6 py-5 text-[11px] uppercase tracking-[0.22em] text-muted font-medium hidden md:table-cell">Category</th>
+                    <th className="text-left px-6 py-5 text-[11px] uppercase tracking-[0.22em] text-muted font-medium">Price</th>
+                    <th className="text-left px-6 py-5 text-[11px] uppercase tracking-[0.22em] text-muted font-medium hidden sm:table-cell">Stock</th>
+                    <th className="text-left px-6 py-5 text-[11px] uppercase tracking-[0.22em] text-muted font-medium hidden sm:table-cell">Featured</th>
                     <th className="px-6 py-5"></th>
                   </tr>
                 </thead>
@@ -321,13 +321,13 @@ export default function Admin() {
                       <td className="px-6 py-4 text-bone-300 hidden sm:table-cell tabular">{p.stock}</td>
                       <td className="px-6 py-4 hidden sm:table-cell">
                         {p.featured
-                          ? <span className="text-[10px] uppercase tracking-[0.28em] px-2 py-0.5 bg-lime/10 text-lime border border-lime/30">Yes</span>
+                          ? <span className="text-[10px] uppercase tracking-[0.22em] px-2 py-0.5 bg-orange/10 text-orange border border-orange/30">Yes</span>
                           : <span className="text-xs text-muted">—</span>}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <button
                           onClick={() => { if (confirm(`Delete "${p.title}"?`)) removeProduct.mutate(p._id); }}
-                          className="text-xs uppercase tracking-[0.28em] text-coral link-underline"
+                          className="text-xs uppercase tracking-[0.22em] text-coral link-underline"
                         >
                           Delete
                         </button>
@@ -354,41 +354,41 @@ export default function Admin() {
 
             <form onSubmit={submitProduct} className="space-y-8 p-8 lg:p-10 bg-white border border-black/10">
               <label className="block">
-                <span className="text-xs uppercase tracking-[0.28em] text-muted">Product name</span>
+                <span className="text-xs uppercase tracking-[0.22em] text-muted">Product name</span>
                 <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
                   className="mt-3 w-full h-12 bg-transparent border-b border-black/15 focus:border-bone outline-none text-bone" />
               </label>
 
               <label className="block">
-                <span className="text-xs uppercase tracking-[0.28em] text-muted">Description</span>
+                <span className="text-xs uppercase tracking-[0.22em] text-muted">Description</span>
                 <textarea required rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })}
                   className="mt-3 w-full bg-transparent border-b border-black/15 focus:border-bone outline-none resize-none text-bone leading-relaxed" />
               </label>
 
               <div className="grid sm:grid-cols-3 gap-x-8 gap-y-8">
                 <label className="block">
-                  <span className="text-xs uppercase tracking-[0.28em] text-muted">Category</span>
+                  <span className="text-xs uppercase tracking-[0.22em] text-muted">Category</span>
                   <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}
                     className="mt-3 w-full h-12 bg-transparent border-b border-black/15 focus:border-bone outline-none text-bone">
                     {CATEGORIES.map((c) => <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>)}
                   </select>
                 </label>
                 <label className="block">
-                  <span className="text-xs uppercase tracking-[0.28em] text-muted">Price (€)</span>
+                  <span className="text-xs uppercase tracking-[0.22em] text-muted">Price (€)</span>
                   <input required type="number" min="0" step="0.01" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })}
                     className="mt-3 w-full h-12 bg-transparent border-b border-black/15 focus:border-bone outline-none text-bone tabular" />
                 </label>
                 <label className="block">
-                  <span className="text-xs uppercase tracking-[0.28em] text-muted">Stock</span>
+                  <span className="text-xs uppercase tracking-[0.22em] text-muted">Stock</span>
                   <input type="number" min="0" value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })}
                     className="mt-3 w-full h-12 bg-transparent border-b border-black/15 focus:border-bone outline-none text-bone tabular" />
                 </label>
               </div>
 
               <label className="block">
-                <span className="text-xs uppercase tracking-[0.28em] text-muted">Image</span>
+                <span className="text-xs uppercase tracking-[0.22em] text-muted">Image</span>
                 <input required type="file" accept="image/*" onChange={onImage}
-                  className="mt-3 w-full text-sm text-bone-300 file:mr-4 file:h-10 file:px-5 file:border-0 file:bg-bone file:text-white file:text-xs file:uppercase file:tracking-[0.28em] hover:file:bg-lime cursor-pointer" />
+                  className="mt-3 w-full text-sm text-bone-300 file:mr-4 file:h-10 file:px-5 file:border-0 file:bg-bone file:text-white file:text-xs file:uppercase file:tracking-[0.22em] hover:file:bg-orange cursor-pointer" />
               </label>
 
               {preview && (
@@ -398,12 +398,12 @@ export default function Admin() {
               )}
 
               <label className="flex items-center gap-3 text-sm text-bone cursor-pointer">
-                <input type="checkbox" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} className="accent-lime w-4 h-4" />
+                <input type="checkbox" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} className="accent-orange w-4 h-4" />
                 Feature on home page
               </label>
 
               {createStatus && (
-                <div className={`text-sm ${createStatus.type === 'ok' ? 'text-sage' : 'text-coral'}`}>
+                <div className={`text-sm ${createStatus.type === 'ok' ? 'text-violet' : 'text-coral'}`}>
                   — {createStatus.msg}
                 </div>
               )}

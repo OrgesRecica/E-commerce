@@ -14,7 +14,7 @@ const EMPTY_DETAILS = { fullName: '', email: '', phone: '', line1: '', city: '',
 function Field({ label, ...props }) {
   return (
     <label className="block">
-      <span className="text-xs uppercase tracking-[0.28em] text-muted">{label}</span>
+      <span className="text-xs uppercase tracking-[0.22em] text-muted">{label}</span>
       <input
         {...props}
         className="mt-3 w-full h-12 bg-transparent border-b border-black/15 focus:border-bone outline-none text-bone"
@@ -80,7 +80,7 @@ function PaymentForm({ total }) {
           </svg>
         </button>
       </Magnetic>
-      <p className="text-center text-xs text-muted uppercase tracking-[0.28em]">Secured by Stripe — card details never stored</p>
+      <p className="text-center text-xs text-muted uppercase tracking-[0.22em]">Secured by Stripe — card details never stored</p>
     </form>
   );
 }
@@ -97,7 +97,7 @@ export default function Checkout() {
     return (
       <section className="page-top pb-32">
         <div className="container mx-auto px-5 max-w-[88rem]">
-          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-muted mb-10">
+          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-muted mb-10">
             <Link to="/" className="link-underline">Home</Link>
             <span>/</span>
             <span className="text-bone">Checkout</span>
@@ -136,7 +136,7 @@ export default function Checkout() {
     <>
       <section className="page-top pb-12">
         <div className="container mx-auto px-5 max-w-[88rem]">
-          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-muted mb-10">
+          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-muted mb-10">
             <Link to="/" className="link-underline">Home</Link>
             <span>/</span>
             <Link to="/cart" className="link-underline">Cart</Link>
@@ -152,7 +152,7 @@ export default function Checkout() {
               </h1>
             </div>
             <div className="lg:col-span-4 lg:pl-6 lg:border-l border-black/10">
-              <p className="text-xs uppercase tracking-[0.28em] text-muted mb-2">Total</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-muted mb-2">Total</p>
               <p className="text-3xl font-light text-bone tabular tracking-normal">€{total.toFixed(2)}</p>
             </div>
           </div>
@@ -190,7 +190,7 @@ export default function Checkout() {
                   <p className="text-bone font-medium tracking-normal">{details.fullName}</p>
                   <p className="text-bone-300">{details.email} · {details.phone}</p>
                   <p className="text-bone-300">{details.line1}, {details.city}, {details.postalCode}, {details.country}</p>
-                  <button onClick={() => setStep(1)} className="text-xs uppercase tracking-[0.28em] text-lime mt-3 link-underline">Edit details</button>
+                  <button onClick={() => setStep(1)} className="text-xs uppercase tracking-[0.22em] text-orange mt-3 link-underline">Edit details</button>
                 </div>
 
                 <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
@@ -202,7 +202,7 @@ export default function Checkout() {
 
           {/* Order summary */}
           <aside className="lg:col-span-5 lg:pl-12 lg:border-l border-black/10">
-            <p className="text-xs uppercase tracking-[0.32em] text-muted mb-6">Summary</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-muted mb-6">Summary</p>
             <ul className="space-y-5 mb-6 pb-6 border-b border-black/10">
               {items.map((item) => (
                 <li key={item.productId} className="flex gap-4 items-center">

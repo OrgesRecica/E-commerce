@@ -43,12 +43,12 @@ export default function Register() {
           <p className="section-mark mb-6">Become a member</p>
           <h1 className="kinetic text-display-md text-bone mb-3">Create account</h1>
           <p className="text-bone-300 mb-12">
-            Already a member? <Link to="/login" className="text-lime link-underline font-medium">Sign in</Link>
+            Already a member? <Link to="/login" className="text-orange link-underline font-medium">Sign in</Link>
           </p>
 
           <form onSubmit={submit} className="space-y-8">
             <label className="block">
-              <span className="text-xs uppercase tracking-[0.28em] text-muted">Full name</span>
+              <span className="text-xs uppercase tracking-[0.22em] text-muted">Full name</span>
               <input
                 required value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -56,7 +56,7 @@ export default function Register() {
               />
             </label>
             <label className="block">
-              <span className="text-xs uppercase tracking-[0.28em] text-muted">Email</span>
+              <span className="text-xs uppercase tracking-[0.22em] text-muted">Email</span>
               <input
                 required type="email" value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -64,7 +64,7 @@ export default function Register() {
               />
             </label>
             <label className="block">
-              <span className="text-xs uppercase tracking-[0.28em] text-muted">Password — min. 6</span>
+              <span className="text-xs uppercase tracking-[0.22em] text-muted">Password — min. 6</span>
               <input
                 required type="password" minLength={6} value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
@@ -95,14 +95,14 @@ export default function Register() {
         <div className="relative h-full p-12 flex flex-col justify-between">
           <Logo size={48} textSize="text-2xl" variant="light" />
           <div>
-            <p className="text-xs uppercase tracking-[0.32em] text-lime mb-8">Member benefits</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-orange mb-8">Member benefits</p>
             <h2 className="kinetic text-4xl lg:text-5xl font-light tracking-normal mb-12 leading-tight">
-              Four reasons to <em className="text-lime">join</em>.
+              Four reasons to <em className="text-orange">join</em>.
             </h2>
             <div className="space-y-px bg-white/10">
               {perks.map((p, i) => (
                 <div key={p.t} className="bg-bone p-5 flex gap-5 items-start">
-                  <span className="text-xs text-white/40 tabular tracking-[0.28em] w-8 pt-1">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="text-xs text-white/40 tabular tracking-[0.22em] w-8 pt-1">{String(i + 1).padStart(2, '0')}</span>
                   <div>
                     <h3 className="font-medium tracking-normal mb-1">{p.t}</h3>
                     <p className="text-sm text-white/60 leading-relaxed">{p.d}</p>

@@ -5,6 +5,7 @@ import api from '../api/axios.js';
 import ProductCard from '../components/ProductCard.jsx';
 import Marquee from '../components/Marquee.jsx';
 import Magnetic from '../components/Magnetic.jsx';
+import FactoryHeroAnimation from '../components/FactoryHeroAnimation.jsx';
 import { useReveal } from '../hooks/useReveal.js';
 import { useCounter } from '../hooks/useCounter.js';
 
@@ -69,72 +70,10 @@ function Stat({ to, label, suffix = '+', prefix = '' }) {
   const [v, ref] = useCounter(to);
   return (
     <div ref={ref} className="premium-panel p-5">
-      <div className="text-4xl md:text-5xl font-extrabold leading-none tabular text-bone">
+      <div className="text-3xl md:text-4xl font-semibold leading-none tabular text-bone">
         {prefix}{v}{suffix}
       </div>
-      <p className="mt-3 text-xs uppercase tracking-[0.18em] text-muted font-bold">{label}</p>
-    </div>
-  );
-}
-
-function RunSimulator() {
-  const [quantity, setQuantity] = useState(28000);
-  const [thickness, setThickness] = useState(45);
-  const rollHours = Math.max(8, Math.round((quantity / 4200) + (thickness / 9)));
-  const recycledKg = Math.round(quantity * thickness * 0.00031);
-
-  return (
-    <div className="premium-panel bg-white p-5 md:p-6 shadow-soft">
-      <div className="flex items-center justify-between gap-4 mb-6">
-        <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-lime font-extrabold">Run simulator</p>
-          <h3 className="mt-2 text-xl font-extrabold text-bone">Packaging quote console</h3>
-        </div>
-        <span className="rounded-md bg-navy px-3 py-1 text-xs font-bold text-white">ISO 9001</span>
-      </div>
-
-      <label className="block">
-        <div className="flex justify-between text-xs uppercase tracking-[0.16em] text-muted font-bold">
-          <span>Quantity</span>
-          <span className="tabular">{quantity.toLocaleString()} units</span>
-        </div>
-        <input
-          type="range"
-          min="5000"
-          max="90000"
-          step="1000"
-          value={quantity}
-          onChange={(e) => setQuantity(Number(e.target.value))}
-          className="mt-3 w-full accent-lime"
-        />
-      </label>
-
-      <label className="mt-6 block">
-        <div className="flex justify-between text-xs uppercase tracking-[0.16em] text-muted font-bold">
-          <span>Film thickness</span>
-          <span className="tabular">{thickness} mic</span>
-        </div>
-        <input
-          type="range"
-          min="18"
-          max="90"
-          step="1"
-          value={thickness}
-          onChange={(e) => setThickness(Number(e.target.value))}
-          className="mt-3 w-full accent-lime"
-        />
-      </label>
-
-      <div className="mt-7 grid grid-cols-2 gap-3">
-        <div className="rounded-md bg-ink-700 p-4">
-          <p className="text-xs uppercase tracking-[0.16em] text-muted font-bold">Est. run time</p>
-          <p className="mt-2 text-3xl font-extrabold text-bone tabular">{rollHours}h</p>
-        </div>
-        <div className="rounded-md bg-navy p-4 text-white">
-          <p className="text-xs uppercase tracking-[0.16em] text-white/60 font-bold">Recycled input</p>
-          <p className="mt-2 text-3xl font-extrabold tabular">{recycledKg}kg</p>
-        </div>
-      </div>
+      <p className="mt-3 text-xs uppercase tracking-[0.14em] text-muted font-medium">{label}</p>
     </div>
   );
 }
@@ -163,11 +102,11 @@ function LineExplorer() {
                   key={c.name}
                   onClick={() => setActive(i)}
                   className={`text-left rounded-lg border p-4 transition ${
-                    active === i ? 'border-lime bg-lime text-white shadow-glow' : 'border-bone/10 bg-ink-800 text-bone hover:border-violet/30'
+                    active === i ? 'border-orange bg-orange text-white shadow-glow' : 'border-bone/10 bg-ink-800 text-bone hover:border-violet/30'
                   }`}
                 >
-                  <span className="text-xs font-extrabold uppercase tracking-[0.18em] opacity-70">{c.no} / {c.sub}</span>
-                  <span className="mt-1 block text-xl font-extrabold">{c.name}</span>
+                  <span className="text-xs font-semibold uppercase tracking-[0.14em] opacity-70">{c.no} / {c.sub}</span>
+                  <span className="mt-1 block text-xl font-semibold">{c.name}</span>
                 </button>
               ))}
             </div>
@@ -184,8 +123,8 @@ function LineExplorer() {
 
               <div className="rounded-lg bg-navy p-5 text-white">
                 <div className="flex justify-between items-center mb-5">
-                  <p className="text-xs uppercase tracking-[0.18em] text-white/60 font-bold">Spec graph</p>
-                  <span className="text-lime font-extrabold">{item.no}</span>
+                  <p className="text-xs uppercase tracking-[0.14em] text-white/60 font-medium">Spec graph</p>
+                  <span className="text-orange font-semibold">{item.no}</span>
                 </div>
                 <svg viewBox="0 0 260 130" className="w-full h-44">
                   {[25, 50, 75, 100].map((y) => (
@@ -199,8 +138,8 @@ function LineExplorer() {
                 <div className="grid grid-cols-2 gap-3">
                   {values.map((v, i) => (
                     <div key={labels[i]} className="rounded-md bg-white/10 p-3">
-                      <p className="text-[10px] uppercase tracking-[0.14em] text-white/50 font-bold">{labels[i]}</p>
-                      <p className="mt-1 text-2xl font-extrabold tabular">{v}%</p>
+                      <p className="text-[10px] uppercase tracking-[0.12em] text-white/50 font-medium">{labels[i]}</p>
+                      <p className="mt-1 text-2xl font-semibold tabular">{v}%</p>
                     </div>
                   ))}
                 </div>
@@ -233,8 +172,8 @@ function ImpactDashboard() {
         <div className="mt-6 premium-panel overflow-hidden">
           <div className="grid lg:grid-cols-12">
             <div className="lg:col-span-4 bg-navy p-6 md:p-8 text-white">
-              <p className="text-xs uppercase tracking-[0.18em] text-lime font-extrabold mb-4">Operating system</p>
-              <h3 className="text-3xl font-extrabold leading-tight">Manufacturing data, not marketing noise.</h3>
+              <p className="text-xs uppercase tracking-[0.14em] text-orange font-semibold mb-4">Operating system</p>
+              <h3 className="text-3xl font-semibold leading-tight">Manufacturing data, not marketing noise.</h3>
               <p className="mt-5 text-sm text-white/70 leading-relaxed">
                 A compact view of the same business facts already on the site: longevity, recycled production, clients, and product lines.
               </p>
@@ -243,13 +182,13 @@ function ImpactDashboard() {
               <div className="grid gap-5">
                 {metrics.map((m) => (
                   <div key={m.label}>
-                    <div className="flex justify-between text-xs uppercase tracking-[0.16em] font-bold text-muted mb-2">
+                    <div className="flex justify-between text-xs uppercase tracking-[0.13em] font-medium text-muted mb-2">
                       <span>{m.label}</span>
                       <span className="tabular">{m.value}</span>
                     </div>
                     <div className="h-3 rounded-full bg-ink-700 overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-violet to-lime"
+                        className="h-full rounded-full bg-gradient-to-r from-violet to-orange"
                         style={{ width: `${Math.min(100, (m.value / m.max) * 100)}%` }}
                       />
                     </div>
@@ -277,12 +216,12 @@ export default function Home() {
     <>
       <section className="relative overflow-hidden bg-navy text-white pt-32 lg:pt-40 pb-16">
         <div className="absolute inset-0 dot-grid opacity-20" />
-        <div className="absolute right-0 top-20 h-96 w-96 rounded-full bg-lime/20 blur-3xl" />
-        <div className="relative container mx-auto px-5 max-w-[88rem] grid lg:grid-cols-12 gap-10 items-center">
-          <div className="lg:col-span-7">
+        <div className="absolute right-0 top-20 h-96 w-96 rounded-full bg-orange/20 blur-3xl" />
+        <div className="relative container mx-auto px-5 max-w-[88rem] grid lg:grid-cols-12 gap-6 items-center">
+          <div className="lg:col-span-6">
             <div className="flex flex-wrap gap-3 mb-8 reveal">
-              <span className="rounded-md bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.18em] font-bold text-white/75">Manufacturing & Trading Co.</span>
-              <span className="rounded-md bg-lime px-3 py-1 text-xs uppercase tracking-[0.18em] font-bold text-white">Est. 1999</span>
+              <span className="rounded-md bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.14em] font-medium text-white/75">Manufacturing & Trading Co.</span>
+              <span className="rounded-md bg-orange px-3 py-1 text-xs uppercase tracking-[0.14em] font-medium text-white">Est. 1999</span>
             </div>
             <h1 className="text-display-2xl reveal">
               <span className="line-mask"><span>Premium packaging</span></span>
@@ -299,8 +238,8 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="lg:col-span-5 reveal" data-effect="right">
-            <RunSimulator />
+          <div className="lg:col-span-6 reveal" data-effect="right">
+            <FactoryHeroAnimation />
           </div>
         </div>
       </section>
@@ -340,14 +279,14 @@ export default function Home() {
           <div className="lg:col-span-4">
             <p className="section-mark mb-5 reveal">Heritage</p>
             <h2 className="text-display-md text-bone reveal">Twenty-five years of growth.</h2>
-            <Link to="/about" className="mt-8 inline-flex text-sm font-bold text-lime link-underline reveal">Read the full story</Link>
+            <Link to="/about" className="mt-8 inline-flex text-sm font-medium text-orange link-underline reveal">Read the full story</Link>
           </div>
           <div className="lg:col-span-8 grid gap-3">
             {milestones.map((m, i) => (
               <div key={m.y} className="reveal premium-panel p-5 grid md:grid-cols-12 gap-5 items-start" data-delay={i * 80}>
-                <span className="md:col-span-2 text-2xl font-extrabold text-lime tabular">{m.y}</span>
+                <span className="md:col-span-2 text-2xl font-semibold text-orange tabular">{m.y}</span>
                 <div className="md:col-span-10">
-                  <h3 className="text-xl font-extrabold text-bone">{m.t}</h3>
+                  <h3 className="text-xl font-semibold text-bone">{m.t}</h3>
                   <p className="mt-2 text-bone-300 leading-relaxed">{m.d}</p>
                 </div>
               </div>
@@ -363,7 +302,7 @@ export default function Home() {
               <p className="section-mark mb-5 reveal">Trusted by</p>
               <h2 className="text-display-md text-bone reveal">Sixty businesses and counting.</h2>
             </div>
-            <Link to="/clients" className="text-sm font-bold text-lime link-underline reveal">View all partners</Link>
+            <Link to="/clients" className="text-sm font-medium text-orange link-underline reveal">View all partners</Link>
           </div>
         </div>
         <Marquee variant="default" items={clients} speed="fast" />
@@ -377,7 +316,7 @@ export default function Home() {
               <p className="section-mark mb-5 reveal">Journal</p>
               <h2 className="text-display-md text-bone reveal">Latest field notes.</h2>
             </div>
-            <Link to="/news" className="text-sm font-bold text-lime link-underline reveal">All entries</Link>
+            <Link to="/news" className="text-sm font-medium text-orange link-underline reveal">All entries</Link>
           </div>
 
           <div className="grid md:grid-cols-3 gap-5">
@@ -387,11 +326,11 @@ export default function Home() {
                   <img src={n.img} alt={n.title} className="w-full h-full object-cover transition duration-700 group-hover:scale-[1.035]" />
                 </div>
                 <div className="p-6">
-                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.16em] text-muted font-bold mb-4">
+                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.13em] text-muted font-medium mb-4">
                     <span>{n.tag}</span>
                     <span>{n.date}</span>
                   </div>
-                  <h3 className="text-xl font-extrabold text-bone leading-snug group-hover:text-lime transition-colors">{n.title}</h3>
+                  <h3 className="text-xl font-semibold text-bone leading-snug group-hover:text-orange transition-colors">{n.title}</h3>
                   <p className="mt-3 text-sm text-bone-300 leading-relaxed line-clamp-2">{n.excerpt}</p>
                 </div>
               </article>
@@ -403,7 +342,7 @@ export default function Home() {
       <section className="py-28 bg-navy text-white">
         <div className="container mx-auto px-5 max-w-[88rem] grid lg:grid-cols-12 gap-10 items-center">
           <div className="lg:col-span-7">
-            <p className="text-xs uppercase tracking-[0.18em] text-lime font-extrabold mb-5 reveal">Custom orders</p>
+            <p className="text-xs uppercase tracking-[0.14em] text-orange font-semibold mb-5 reveal">Custom orders</p>
             <h2 className="text-display-lg reveal">Tell us your specifications.</h2>
             <p className="mt-6 max-w-xl text-white/70 leading-relaxed reveal" data-delay="120">
               Dimensions, material, quantity, print. Our team responds within 24 hours with a tailored quote for retailers, pharmacies, and industrial businesses.
@@ -419,7 +358,7 @@ export default function Home() {
             </Magnetic>
             <a href="mailto:info@scampa.eu" className="btn-ghost w-full justify-between h-14 px-7 border-white/20 bg-white/10 text-white hover:bg-white hover:text-bone">
               info@scampa.eu
-              <span className="text-xs uppercase tracking-[0.16em] text-white/50">Email</span>
+              <span className="text-xs uppercase tracking-[0.13em] text-white/50">Email</span>
             </a>
           </div>
         </div>

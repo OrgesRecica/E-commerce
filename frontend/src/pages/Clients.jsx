@@ -38,7 +38,7 @@ function HeaderCounter({ value, label }) {
   return (
     <div ref={ref}>
       <div className="text-5xl md:text-6xl font-light text-bone tabular tracking-normal">{v}+</div>
-      <p className="text-xs uppercase tracking-[0.28em] text-muted mt-1">{label}</p>
+      <p className="text-xs uppercase tracking-[0.22em] text-muted mt-1">{label}</p>
     </div>
   );
 }
@@ -51,7 +51,7 @@ export default function Clients() {
       {/* ──────────── HEADER ──────────── */}
       <section className="page-top pb-12">
         <div className="container mx-auto px-5 max-w-[88rem]">
-          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-muted mb-10 reveal">
+          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-muted mb-10 reveal">
             <Link to="/" className="link-underline">Home</Link>
             <span>/</span>
             <span className="text-bone">Clients</span>
@@ -91,7 +91,7 @@ export default function Clients() {
             <div key={group.sector} className="reveal" data-delay={gi * 60}>
               <div className="grid lg:grid-cols-12 gap-12 mb-12 items-end">
                 <div className="lg:col-span-4">
-                  <p className="text-xs uppercase tracking-[0.32em] text-muted mb-4">
+                  <p className="text-xs uppercase tracking-[0.24em] text-muted mb-4">
                     Sector {String(gi + 1).padStart(2, '0')} · {group.clients.length} clients
                   </p>
                   <h2 className="kinetic text-3xl md:text-4xl font-medium tracking-normal text-bone">
@@ -103,7 +103,7 @@ export default function Clients() {
                     {group.clients.map((client, ci) => (
                       <div key={client} className="group flex items-baseline gap-3 py-2 border-b border-black/10">
                         <span className="text-xs text-muted tabular w-6">{String(ci + 1).padStart(2, '0')}</span>
-                        <span className="text-bone text-sm font-medium tracking-normal group-hover:text-lime transition">
+                        <span className="text-bone text-sm font-medium tracking-normal group-hover:text-orange transition">
                           {client}
                         </span>
                       </div>
@@ -119,9 +119,9 @@ export default function Clients() {
       {/* ──────────── PHILOSOPHY ──────────── */}
       <section className="py-32 bg-bone text-white">
         <div className="container mx-auto px-5 max-w-[88rem]">
-          <p className="text-xs uppercase tracking-[0.32em] text-white/50 mb-8 reveal">N° 05 — Philosophy</p>
+          <p className="text-xs uppercase tracking-[0.24em] text-white/50 mb-8 reveal">N° 05 — Philosophy</p>
           <blockquote className="kinetic text-3xl md:text-5xl font-light leading-[1.15] tracking-normal reveal max-w-5xl">
-            "SCAMPA values <em className="text-lime">long-term relationships</em>,
+            "SCAMPA values <em className="text-orange">long-term relationships</em>,
             treating clients as partners."
           </blockquote>
           <p className="mt-12 text-white/60 max-w-2xl reveal" data-delay="200">

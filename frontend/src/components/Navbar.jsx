@@ -13,179 +13,219 @@ const links = [
   { to: '/contact', label: 'Contact' },
 ];
 
+function BagIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+      <path d="M3 6h18" />
+      <path d="M16 10a4 4 0 0 1-8 0" />
+    </svg>
+  );
+}
+
+function MenuIcon({ open }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
+      {open ? (
+        <>
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </>
+      ) : (
+        <>
+          <path d="M4 8h16" />
+          <path d="M4 16h16" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+function DesktopLink({ link }) {
+  return (
+    <NavLink
+      to={link.to}
+      end={link.end}
+      className={({ isActive }) =>
+        `relative flex h-16 items-center px-2 text-[13px] font-medium transition-colors ${
+          isActive ? 'text-white' : 'text-white/66 hover:text-white'
+        }`
+      }
+    >
+      {({ isActive }) => (
+        <>
+          <span>{link.label}</span>
+          <span
+            className={`absolute bottom-0 left-2 right-2 h-0.5 origin-left rounded-full bg-orange transition-transform duration-300 ${
+              isActive ? 'scale-x-100' : 'scale-x-0'
+            }`}
+          />
+        </>
+      )}
+    </NavLink>
+  );
+}
+
+function MobileLink({ link, onClick }) {
+  return (
+    <NavLink
+      to={link.to}
+      end={link.end}
+      onClick={onClick}
+      className={({ isActive }) =>
+        `flex h-12 items-center justify-between rounded-md border px-4 text-sm font-medium transition ${
+          isActive
+            ? 'border-orange bg-orange text-white'
+            : 'border-white/10 bg-white/6 text-white/72 hover:border-white/20 hover:text-white'
+        }`
+      }
+    >
+      {({ isActive }) => (
+        <>
+          <span>{link.label}</span>
+          <span className={`h-1.5 w-1.5 rounded-full ${isActive ? 'bg-white' : 'bg-orange/70'}`} />
+        </>
+      )}
+    </NavLink>
+  );
+}
+
 export default function Navbar() {
   const dispatch = useDispatch();
   const { user } = useSelector((s) => s.auth);
   const cartCount = useSelector((s) => s.cart.items.reduce((n, i) => n + i.quantity, 0));
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [lang, setLang] = useState('EN');
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
+  const closeMenu = () => setOpen(false);
+  const handleLogout = () => {
+    dispatch(logout());
+    closeMenu();
+  };
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50">
-      {/* Slim utility row */}
-      <div
-        className={`bg-bone text-white text-[11px] tracking-wide overflow-hidden transition-all duration-500 ${
-          scrolled ? 'h-0 opacity-0' : 'h-7 opacity-100'
-        }`}
-      >
-        <div className="container mx-auto px-5 max-w-[88rem] h-full flex items-center justify-between">
-          <div className="hidden md:flex items-center gap-5 text-white/70">
-            <span>Drenas, Kosovo</span>
-            <span className="text-white/30">·</span>
-            <a href="mailto:info@scampa.eu" className="hover:text-lime transition link-underline">info@scampa.eu</a>
-            <span className="text-white/30">·</span>
-            <a href="tel:+38345265760" className="hover:text-lime transition link-underline">+383 45 265 760</a>
-          </div>
-          <div className="flex items-center gap-4 ml-auto text-white/60">
-            <span className="hidden sm:inline">ISO 9001 — Est. 1999</span>
-            <span className="text-white/30 hidden sm:inline">·</span>
-            <button
-              onClick={() => setLang(lang === 'EN' ? 'KS' : 'EN')}
-              className="hover:text-lime transition uppercase tracking-[0.18em]"
-              aria-label="Toggle language"
-            >
-              {lang}
-            </button>
-          </div>
-        </div>
-      </div>
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-navy text-white shadow-glow-navy">
+      <div className="mx-auto max-w-[88rem] px-4 sm:px-5">
+        <nav className="grid h-16 grid-cols-[auto_1fr_auto] items-center gap-5">
+          <Link to="/" onClick={closeMenu} className="flex items-center" data-cursor="hover">
+            <Logo size={36} textSize="text-base" variant="light" />
+          </Link>
 
-      {/* Main bar */}
-      <div className={`transition-all duration-500 ${scrolled ? 'glass' : 'bg-white/95 border-b border-bone/10'}`}>
-        <div className="container mx-auto px-5 max-w-[88rem]">
-          <nav className={`flex items-center justify-between transition-all duration-500 ${scrolled ? 'h-16' : 'h-20'}`}>
-            <Link to="/" className="flex items-center group" data-cursor="hover">
-              <Logo size={scrolled ? 34 : 40} textSize={scrolled ? 'text-base' : 'text-lg'} />
+          <div className="hidden h-full items-center justify-center lg:flex">
+            <div className="flex h-full items-center gap-6">
+              {links.map((link) => (
+                <DesktopLink key={link.to} link={link} />
+              ))}
+              {user?.role === 'admin' && <DesktopLink link={{ to: '/admin', label: 'Admin' }} />}
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-2">
+            <a
+              href="mailto:info@scampa.eu"
+              className="hidden text-xs font-medium text-white/60 transition hover:text-white xl:inline-flex"
+            >
+              info@scampa.eu
+            </a>
+
+            <span className="hidden h-5 w-px bg-white/14 xl:block" />
+
+            <Link
+              to="/cart"
+              onClick={closeMenu}
+              className="relative grid h-10 w-10 place-items-center rounded-md border border-white/12 bg-white/6 text-white transition hover:border-orange hover:text-orange"
+              aria-label="Cart"
+            >
+              <BagIcon />
+              {cartCount > 0 && (
+                <span className="absolute -right-1 -top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-orange px-1 text-[10px] font-medium text-white tabular">
+                  {cartCount}
+                </span>
+              )}
             </Link>
 
-            <div className="hidden lg:flex items-center gap-1 rounded-md border border-bone/10 bg-ink-700/70 p-1">
-              {links.map((l) => (
-                <NavLink
-                  key={l.to}
-                  to={l.to}
-                  end={l.end}
-                  className={({ isActive }) =>
-                    `relative px-4 py-2 text-[13px] font-medium tracking-normal transition-colors ${
-                      isActive ? 'text-lime' : 'text-bone-200 hover:text-bone'
-                    }`
-                  }
-                >
-                  {({ isActive }) => (
-                    <>
-                      <span className="link-underline">{l.label}</span>
-                      {isActive && <span className="absolute -bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-lime" />}
-                    </>
-                  )}
-                </NavLink>
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="hidden h-10 items-center rounded-md border border-white/12 bg-white/6 px-4 text-[13px] font-medium text-white/75 transition hover:border-coral/40 hover:text-white sm:inline-flex"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link
+                to="/login"
+                onClick={closeMenu}
+                className="hidden h-10 items-center rounded-md border border-white/12 bg-white/6 px-4 text-[13px] font-medium text-white/75 transition hover:border-orange hover:text-white sm:inline-flex"
+              >
+                Sign in
+              </Link>
+            )}
+
+            <Link
+              to="/contact"
+              onClick={closeMenu}
+              className="hidden h-10 items-center rounded-md bg-orange px-4 text-[13px] font-medium text-white shadow-glow transition hover:bg-orange-600 md:inline-flex"
+            >
+              Request quote
+            </Link>
+
+            <button
+              onClick={() => setOpen((value) => !value)}
+              className="grid h-10 w-10 place-items-center rounded-md border border-white/12 bg-white/6 text-white transition hover:border-orange hover:text-orange lg:hidden"
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-expanded={open}
+            >
+              <MenuIcon open={open} />
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      {open && (
+        <div className="lg:hidden">
+          <div className="fixed inset-0 top-16 bg-navy/55 backdrop-blur-sm" onClick={closeMenu} />
+          <div className="relative mx-3 mb-3 rounded-md border border-white/10 bg-navy-800 p-3 shadow-soft">
+            <div className="grid gap-2">
+              {links.map((link) => (
+                <MobileLink key={link.to} link={link} onClick={closeMenu} />
               ))}
-              {user?.role === 'admin' && (
-                <NavLink
-                  to="/admin"
-                  className={({ isActive }) =>
-                    `px-4 py-2 text-[13px] font-medium tracking-normal transition-colors ${
-                      isActive ? 'text-lime' : 'text-bone-200 hover:text-bone'
-                    }`
-                  }
-                >
-                  Admin
-                </NavLink>
-              )}
+              {user?.role === 'admin' && <MobileLink link={{ to: '/admin', label: 'Admin' }} onClick={closeMenu} />}
             </div>
 
-            <div className="flex items-center gap-3">
-              <Link
-                to="/cart"
-                  className="relative w-10 h-10 grid place-items-center rounded-md border border-bone/10 bg-white text-bone hover:border-lime hover:text-lime transition"
-                aria-label="Cart"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                  <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
-                  <path d="M3 6h18" />
-                  <path d="M16 10a4 4 0 0 1-8 0" />
-                </svg>
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-lime text-white text-[10px] font-bold rounded-full grid place-items-center tabular">
-                    {cartCount}
-                  </span>
-                )}
-              </Link>
-
+            <div className="mt-3 grid grid-cols-2 gap-2">
               {user ? (
                 <button
-                  onClick={() => dispatch(logout())}
-                  className="hidden sm:inline-flex items-center text-[13px] font-medium text-bone-200 hover:text-coral transition link-underline"
+                  onClick={handleLogout}
+                  className="h-11 rounded-md border border-white/12 bg-white/6 text-sm font-medium text-white/75 transition hover:border-coral/40 hover:text-white"
                 >
                   Logout
                 </button>
               ) : (
                 <Link
                   to="/login"
-                  className="hidden sm:inline-flex items-center px-5 h-10 rounded-md bg-bone text-white text-[13px] font-semibold hover:bg-lime transition tracking-normal shadow-glow"
+                  onClick={closeMenu}
+                  className="grid h-11 place-items-center rounded-md border border-white/12 bg-white/6 text-sm font-medium text-white/75 transition hover:border-orange hover:text-white"
                 >
                   Sign in
                 </Link>
               )}
-
-              <button
-                onClick={() => setOpen((v) => !v)}
-                className="lg:hidden w-10 h-10 grid place-items-center text-bone"
-                aria-label="Menu"
+              <Link
+                to="/contact"
+                onClick={closeMenu}
+                className="grid h-11 place-items-center rounded-md bg-orange text-sm font-medium text-white shadow-glow transition hover:bg-orange-600"
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                  {open ? (
-                    <>
-                      <path d="M18 6 6 18" />
-                      <path d="m6 6 12 12" />
-                    </>
-                  ) : (
-                    <>
-                      <path d="M3 7h18" />
-                      <path d="M3 17h18" />
-                    </>
-                  )}
-                </svg>
-              </button>
+                Request quote
+              </Link>
             </div>
-          </nav>
-
-          {open && (
-            <div className="lg:hidden pb-5 flex flex-col border-t border-black/5 mt-1 pt-3 -mx-1">
-              {links.map((l) => (
-                <NavLink
-                  key={l.to}
-                  to={l.to}
-                  end={l.end}
-                  onClick={() => setOpen(false)}
-                  className={({ isActive }) =>
-                    `px-4 py-3 text-base font-medium tracking-normal ${
-                      isActive ? 'text-lime' : 'text-bone-200'
-                    }`
-                  }
-                >
-                  {l.label}
-                </NavLink>
-              ))}
-              {user?.role === 'admin' && (
-                <NavLink
-                  to="/admin"
-                  onClick={() => setOpen(false)}
-                  className="px-4 py-3 text-base font-medium tracking-normal text-bone-200"
-                >
-                  Admin
-                </NavLink>
-              )}
-            </div>
-          )}
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 }

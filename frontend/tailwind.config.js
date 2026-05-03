@@ -21,6 +21,11 @@ export default {
           300: '#4e617d',
         },
         muted: '#6e7f96',
+        orange: {
+          DEFAULT: '#ff7a1a',
+          600: '#e86200',
+          700: '#bd4f00',
+        },
         lime: {
           DEFAULT: '#ff7a1a',
           600: '#e86200',
@@ -39,10 +44,10 @@ export default {
         coral: '#c94f2c',
       },
       fontSize: {
-        'display-2xl': ['3rem', { lineHeight: '1', letterSpacing: '0', fontWeight: '800' }],
-        'display-xl': ['2.65rem', { lineHeight: '1.04', letterSpacing: '0', fontWeight: '800' }],
-        'display-lg': ['2.25rem', { lineHeight: '1.08', letterSpacing: '0', fontWeight: '800' }],
-        'display-md': ['1.9rem', { lineHeight: '1.12', letterSpacing: '0', fontWeight: '700' }],
+        'display-2xl': ['3rem', { lineHeight: '1', letterSpacing: '0', fontWeight: '600' }],
+        'display-xl': ['2.6rem', { lineHeight: '1.04', letterSpacing: '0', fontWeight: '600' }],
+        'display-lg': ['2.2rem', { lineHeight: '1.08', letterSpacing: '0', fontWeight: '600' }],
+        'display-md': ['1.85rem', { lineHeight: '1.12', letterSpacing: '0', fontWeight: '600' }],
       },
       keyframes: {
         marquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },

@@ -58,7 +58,7 @@ export default function Products() {
       {/* ──────────── HEADER (light, integrated) ──────────── */}
       <section className="page-top pb-12">
         <div className="container mx-auto px-5 max-w-[88rem]">
-          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-muted mb-10 reveal">
+          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-muted mb-10 reveal">
             <Link to="/" className="link-underline">Home</Link>
             <span>/</span>
             <span className="text-bone">Products</span>
@@ -77,7 +77,7 @@ export default function Products() {
                 Sustainable packaging solutions made from 100% recycled materials.
                 ISO 9001 certified. Bulk and Private-Label orders welcome.
               </p>
-              <p className="mt-4 text-xs uppercase tracking-[0.28em] text-muted">
+              <p className="mt-4 text-xs uppercase tracking-[0.22em] text-muted">
                 {data?.total ?? 0} products · 3 product lines
               </p>
             </div>
@@ -96,12 +96,12 @@ export default function Products() {
                   key={c.slug || 'all'}
                   onClick={() => setCategory(c.slug)}
                   className={`relative pb-1 text-sm font-medium tracking-normal transition-colors ${
-                    category === c.slug ? 'text-lime' : 'text-bone-200 hover:text-bone'
+                    category === c.slug ? 'text-orange' : 'text-bone-200 hover:text-bone'
                   }`}
                 >
                   {c.label}
                   <span className={`absolute bottom-0 left-0 right-0 h-px transition-transform origin-left ${
-                    category === c.slug ? 'bg-lime scale-x-100' : 'bg-bone scale-x-0'
+                    category === c.slug ? 'bg-orange scale-x-100' : 'bg-bone scale-x-0'
                   }`} />
                 </button>
               ))}
@@ -140,7 +140,7 @@ export default function Products() {
             <h2 className="kinetic text-2xl md:text-3xl font-medium tracking-normal text-bone">
               <em>{activeLabel}</em>
             </h2>
-            <p className="text-xs uppercase tracking-[0.28em] text-muted">
+            <p className="text-xs uppercase tracking-[0.22em] text-muted">
               {data?.total ?? 0} {(data?.total ?? 0) === 1 ? 'product' : 'products'}
               {q && <span> — "{q}"</span>}
             </p>
@@ -190,7 +190,7 @@ export default function Products() {
           </div>
           <div className="lg:col-span-5 flex flex-col gap-3 reveal" data-effect="right">
             <Magnetic><Link to="/contact" className="btn-primary w-full justify-between h-14">Request a quote <span>→</span></Link></Magnetic>
-            <a href="mailto:info@scampa.eu" className="btn-ghost w-full justify-between h-14">info@scampa.eu <span className="text-xs uppercase tracking-[0.28em] text-muted">Email</span></a>
+            <a href="mailto:info@scampa.eu" className="btn-ghost w-full justify-between h-14">info@scampa.eu <span className="text-xs uppercase tracking-[0.22em] text-muted">Email</span></a>
           </div>
         </div>
       </section>

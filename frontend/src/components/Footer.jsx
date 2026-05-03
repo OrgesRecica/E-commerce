@@ -5,15 +5,15 @@ import Magnetic from './Magnetic.jsx';
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-navy-900 text-white">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-lime to-transparent" />
-      <div className="absolute -right-24 top-16 h-80 w-80 rounded-full bg-lime/10 blur-3xl" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-orange to-transparent" />
+      <div className="absolute -right-24 top-16 h-80 w-80 rounded-full bg-orange/10 blur-3xl" />
 
       <div className="relative container mx-auto px-5 max-w-[88rem] pt-20 pb-12">
         <div className="rounded-lg border border-white/10 bg-white/10 p-6 md:p-10 mb-16">
           <div className="grid lg:grid-cols-12 gap-8 items-end">
             <div className="lg:col-span-7">
-              <p className="text-xs uppercase tracking-[0.22em] text-lime mb-5 font-bold">Talk to us</p>
-              <h2 className="text-3xl md:text-5xl font-extrabold leading-tight">
+              <p className="text-xs uppercase tracking-[0.18em] text-orange mb-5 font-medium">Talk to us</p>
+              <h2 className="text-3xl md:text-4xl font-medium leading-tight">
                 Let's engineer your next packaging run.
               </h2>
             </div>
@@ -40,39 +40,39 @@ export default function Footer() {
           </div>
 
           <div className="lg:col-span-3">
-            <h4 className="text-xs uppercase tracking-[0.22em] text-lime mb-5 font-bold">Headquarters</h4>
+            <h4 className="text-xs uppercase tracking-[0.18em] text-orange mb-5 font-medium">Headquarters</h4>
             <p className="text-sm text-white/70 leading-relaxed">
               Industrial Business Park<br />
               Drenas, Kosovo
             </p>
-            <a href="mailto:info@scampa.eu" className="block mt-5 text-sm text-white hover:text-lime transition link-underline">
+            <a href="mailto:info@scampa.eu" className="block mt-5 text-sm text-white hover:text-orange transition link-underline">
               info@scampa.eu
             </a>
             <div className="mt-3 space-y-1 text-sm text-white/70">
-              <a href="tel:+38345265760" className="block hover:text-lime transition tabular">+383 45 265 760</a>
-              <a href="tel:+38345265765" className="block hover:text-lime transition tabular">+383 45 265 765</a>
-              <a href="tel:+38338500666" className="block hover:text-lime transition tabular">+383 38 500 666</a>
+              <a href="tel:+38345265760" className="block hover:text-orange transition tabular">+383 45 265 760</a>
+              <a href="tel:+38345265765" className="block hover:text-orange transition tabular">+383 45 265 765</a>
+              <a href="tel:+38338500666" className="block hover:text-orange transition tabular">+383 38 500 666</a>
             </div>
           </div>
 
           <div className="lg:col-span-2">
-            <h4 className="text-xs uppercase tracking-[0.22em] text-lime mb-5 font-bold">Products</h4>
+            <h4 className="text-xs uppercase tracking-[0.18em] text-orange mb-5 font-medium">Products</h4>
             <ul className="space-y-3 text-sm text-white/70">
-              <li><Link to="/products" className="hover:text-lime transition link-underline">Shopping Bags</Link></li>
-              <li><Link to="/products" className="hover:text-lime transition link-underline">Garbage Bags</Link></li>
-              <li><Link to="/products" className="hover:text-lime transition link-underline">Packing Rolls</Link></li>
-              <li><Link to="/products" className="hover:text-lime transition link-underline">Custom Orders</Link></li>
+              <li><Link to="/products" className="hover:text-orange transition link-underline">Shopping Bags</Link></li>
+              <li><Link to="/products" className="hover:text-orange transition link-underline">Garbage Bags</Link></li>
+              <li><Link to="/products" className="hover:text-orange transition link-underline">Packing Rolls</Link></li>
+              <li><Link to="/products" className="hover:text-orange transition link-underline">Custom Orders</Link></li>
             </ul>
           </div>
 
           <div className="lg:col-span-3">
-            <h4 className="text-xs uppercase tracking-[0.22em] text-lime mb-5 font-bold">Company</h4>
+            <h4 className="text-xs uppercase tracking-[0.18em] text-orange mb-5 font-medium">Company</h4>
             <ul className="space-y-3 text-sm text-white/70">
-              <li><Link to="/about" className="hover:text-lime transition link-underline">About Us</Link></li>
-              <li><Link to="/clients" className="hover:text-lime transition link-underline">Our Clients</Link></li>
-              <li><Link to="/news" className="hover:text-lime transition link-underline">Journal</Link></li>
-              <li><Link to="/contact" className="hover:text-lime transition link-underline">Contact</Link></li>
-              <li><a href="#" className="hover:text-lime transition link-underline">Powerpack LLC</a></li>
+              <li><Link to="/about" className="hover:text-orange transition link-underline">About Us</Link></li>
+              <li><Link to="/clients" className="hover:text-orange transition link-underline">Our Clients</Link></li>
+              <li><Link to="/news" className="hover:text-orange transition link-underline">Journal</Link></li>
+              <li><Link to="/contact" className="hover:text-orange transition link-underline">Contact</Link></li>
+              <li><a href="#" className="hover:text-orange transition link-underline">Powerpack LLC</a></li>
             </ul>
 
             <div className="mt-8 flex gap-3">
@@ -81,7 +81,7 @@ export default function Footer() {
                 { label: 'Instagram', short: 'Ig' },
                 { label: 'LinkedIn', short: 'Li' },
               ].map((s) => (
-                <a key={s.label} href="#" aria-label={s.label} className="w-10 h-10 grid place-items-center rounded-md border border-white/20 hover:border-lime hover:text-lime transition text-xs font-semibold">
+                <a key={s.label} href="#" aria-label={s.label} className="w-10 h-10 grid place-items-center rounded-md border border-white/20 hover:border-orange hover:text-orange transition text-xs font-semibold">
                   {s.short}
                 </a>
               ))}
@@ -89,7 +89,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-between items-center gap-4 pt-8 text-xs text-white/40 uppercase tracking-[0.18em]">
+        <div className="flex flex-wrap justify-between items-center gap-4 pt-8 text-xs text-white/40 uppercase tracking-[0.14em]">
           <p>&copy; {new Date().getFullYear()} SCAMPA Manufacturing & Trading Co.</p>
           <div className="flex flex-wrap gap-6">
             <a href="#" className="hover:text-white transition">Privacy</a>

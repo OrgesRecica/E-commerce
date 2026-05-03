@@ -4,6 +4,12 @@
 
 :root {
   color-scheme: light;
+  --brand-orange: #ff7a1a;
+  --brand-orange-dark: #e86200;
+  --brand-blue: #082b5f;
+  --brand-blue-rich: #1f62b7;
+  --brand-surface: #f4f8ff;
+  --brand-ink: #071f45;
 }
 
 html, body, #root { height: 100%; }
@@ -16,7 +22,7 @@ body {
   background:
     linear-gradient(135deg, rgba(255,122,26,0.07), transparent 28rem),
     linear-gradient(225deg, rgba(31,98,183,0.08), transparent 30rem),
-    #f4f8ff;
+    var(--brand-surface);
 }
 
 em, i {
@@ -24,12 +30,12 @@ em, i {
   font-style: normal;
 }
 
-::selection { background: #ff7a1a; color: #ffffff; }
+::selection { background: var(--brand-orange); color: #ffffff; }
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: #f4f8ff; }
+::-webkit-scrollbar-track { background: var(--brand-surface); }
 ::-webkit-scrollbar-thumb { background: #abc1df; border-radius: 999px; }
-::-webkit-scrollbar-thumb:hover { background: #ff7a1a; }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-orange); }
 
 .reveal {
   opacity: 0;
@@ -107,7 +113,7 @@ em, i {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #082b5f, #ff7a1a);
+  background: linear-gradient(90deg, var(--brand-blue), var(--brand-orange));
   transform-origin: right center;
   transform: scaleX(1);
   transition: transform .85s cubic-bezier(0.77,0,0.18,1);
@@ -137,10 +143,10 @@ em, i {
   align-items: center;
   gap: 12px;
   font-size: 11px;
-  letter-spacing: 0.18em;
-  font-weight: 800;
+  letter-spacing: 0.14em;
+  font-weight: 600;
   text-transform: uppercase;
-  color: #ff7a1a;
+  color: var(--brand-orange);
 }
 .section-mark::before {
   content: '';
@@ -167,17 +173,22 @@ em, i {
 }
 
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 h-12 px-7 rounded-md bg-lime text-white font-bold tracking-normal transition-all shadow-glow;
+  @apply inline-flex items-center justify-center gap-2 h-12 px-7 rounded-md text-white font-medium tracking-normal transition-all shadow-glow;
+  background-color: var(--brand-orange);
   letter-spacing: 0;
 }
-.btn-primary:hover { @apply bg-lime-600; transform: translateY(-1px); }
+.btn-primary:hover { background-color: var(--brand-orange-dark); transform: translateY(-1px); }
 .btn-ghost {
-  @apply inline-flex items-center justify-center gap-2 h-12 px-7 rounded-md border border-bone/20 bg-white/70 text-bone font-bold tracking-normal hover:border-lime hover:text-lime transition-all;
+  @apply inline-flex items-center justify-center gap-2 h-12 px-7 rounded-md border border-bone/20 bg-white/70 text-bone font-medium tracking-normal transition-all;
   letter-spacing: 0;
+}
+.btn-ghost:hover {
+  border-color: var(--brand-orange);
+  color: var(--brand-orange);
 }
 
-.page-top { padding-top: 9rem; }
-@media (min-width: 1024px) { .page-top { padding-top: 10rem; } }
+.page-top { padding-top: 4.75rem; }
+@media (min-width: 1024px) { .page-top { padding-top: 5.75rem; } }
 
 .kinetic em {
   color: inherit;
@@ -192,20 +203,21 @@ em, i {
 .text-display-lg,
 .text-display-md {
   letter-spacing: 0;
+  font-weight: 600;
 }
 
 @media (min-width: 768px) {
-  .text-display-2xl { font-size: 4.25rem; line-height: .98; }
-  .text-display-xl { font-size: 3.5rem; line-height: 1; }
-  .text-display-lg { font-size: 2.85rem; line-height: 1.05; }
-  .text-display-md { font-size: 2.35rem; line-height: 1.08; }
+  .text-display-2xl { font-size: 3.9rem; line-height: 1; }
+  .text-display-xl { font-size: 3.2rem; line-height: 1.02; }
+  .text-display-lg { font-size: 2.65rem; line-height: 1.06; }
+  .text-display-md { font-size: 2.2rem; line-height: 1.1; }
 }
 
 @media (min-width: 1280px) {
-  .text-display-2xl { font-size: 5.4rem; }
-  .text-display-xl { font-size: 4.5rem; }
-  .text-display-lg { font-size: 3.35rem; }
-  .text-display-md { font-size: 2.75rem; }
+  .text-display-2xl { font-size: 4.75rem; }
+  .text-display-xl { font-size: 3.95rem; }
+  .text-display-lg { font-size: 3.05rem; }
+  .text-display-md { font-size: 2.48rem; }
 }
 
 .vertical-label {
@@ -221,3 +233,4 @@ em, i {
   line-height: 1;
 }
 .ticker > span { display: inline-block; }
+
