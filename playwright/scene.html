@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>MONO — Scene</title>
+<style>
+  :root { --lime: #d4ff00; --ink: #0a0a0f; }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; overflow: hidden;
+    background: #000;
+    font-family: -apple-system, "SF Pro Display", "Inter", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+  /* Render the 4K-designed scene at half size so Playwright can capture at
+     true 25fps. ffmpeg upscales back to 4K with lanczos. */
+  body { zoom: 0.5; }
+
+  /* ══════════════════════ 4K SCENE (3840 × 2160) ══════════════════════ */
+  .scene {
+    width: 3840px; height: 2160px;
+    position: relative;
+    background:
+      radial-gradient(ellipse 1800px 1200px at 50% 20%, #1d1d2a 0%, #0e0e16 55%, #030306 100%);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Top soft key light (lime tint) */
+  .scene::before {
+    content: '';
+    position: absolute;
+    top: -400px; left: 50%;
+    transform: translateX(-50%);
+    width: 3000px; height: 1500px;
+    background: radial-gradient(ellipse, rgba(212, 255, 0, 0.10) 0%, rgba(212,255,0,0.02) 40%, transparent 65%);
+    pointer-events: none;
+    z-index: 1;
+    filter: blur(10px);
+  }
+  /* Rim backlight from behind the laptop */
+  .scene::after {
+    content: '';
+    position: absolute;
+    bottom: 500px; left: 50%;
+    transform: translateX(-50%);
+    width: 2200px; height: 900px;
+    background: radial-gradient(ellipse, rgba(140, 100, 220, 0.12) 0%, transparent 55%);
+    pointer-events: none;
+    z-index: 1;
+    filter: blur(20px);
+  }
+
+  /* Vignette */
+  .vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 2600px 1600px at 50% 55%, transparent 40%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+    z-index: 30;
+  }
+
+  /* Film grain overlay */
+  .grain {
+    position: absolute; inset: 0;
+    pointer-events: none;
+    z-index: 31;
+    opacity: 0.08;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0   0 0 0 0 0   0 0 0 0 0   0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    animation: grain-shift 1.2s steps(3) infinite;
+  }
+  @keyframes grain-shift {
+    0%   { transform: translate(0,0); }
+    33%  { transform: translate(-12px,8px); }
+    66%  { transform: translate(9px,-6px); }
+    100% { transform: translate(0,0); }
+  }
+
+  /* ══════════════════════ Walnut Desk ══════════════════════ */
+  .desk {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 860px;
+    z-index: 2;
+    background:
+      /* wood grain lines */
+      repeating-linear-gradient(93deg,
+        rgba(0,0,0,0.05) 0px,
+        rgba(0,0,0,0.05) 2px,
+        transparent 2px,
+        transparent 22px),
+      repeating-linear-gradient(91deg,
+        rgba(255,255,255,0.02) 0px,
+        rgba(255,255,255,0.02) 1px,
+        transparent 1px,
+        transparent 9px),
+      /* base colour — dark walnut */
+      linear-gradient(to bottom,
+        #2a1b12 0%,
+        #201208 40%,
+        #12070a 75%,
+        #050206 100%);
+  }
+  /* Desk edge highlight */
+  .desk::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(to right, transparent 8%, rgba(255,200,140,0.22) 50%, transparent 92%);
+  }
+  /* Ambient reflection on wood */
+  .desk::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 2000px; height: 350px;
+    background: radial-gradient(ellipse, rgba(212, 255, 0, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+    filter: blur(30px);
+  }
+
+  /* Soft shadow pool under laptop */
+  .shadow {
+    position: absolute;
+    bottom: 410px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2700px; height: 190px;
+    background: radial-gradient(ellipse, rgba(0,0,0,0.8) 0%, transparent 65%);
+    filter: blur(50px);
+    z-index: 3;
+  }
+
+  /* ══════════════════════ Laptop ══════════════════════ */
+  .laptop {
+    position: absolute;
+    left: 50%;
+    bottom: 360px;
+    transform: translateX(-50%);
+    z-index: 5;
+    animation: cinematic-zoom 30s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    transform-origin: center 72%;
+    filter: drop-shadow(0 40px 90px rgba(0,0,0,0.55));
+  }
+  @keyframes cinematic-zoom {
+    0%   { transform: translateX(-50%) scale(0.985); }
+    60%  { transform: translateX(-50%) scale(1.022); }
+    100% { transform: translateX(-50%) scale(1.048); }
+  }
+
+  /* Screen lid */
+  .lid {
+    width: 2720px;
+    padding: 58px 58px 66px;
+    border-radius: 36px 36px 10px 10px;
+    position: relative;
+    background:
+      /* top aluminum highlight */
+      linear-gradient(to bottom,
+        #48484f 0%,
+        #35353c 12%,
+        #23232a 38%,
+        #15151b 70%,
+        #0d0d13 100%);
+    box-shadow:
+      /* outer edge highlight */
+      inset  0  3px 0 rgba(255,255,255,0.18),
+      inset  0 -3px 0 rgba(0,0,0,0.55),
+      inset  3px 0 0 rgba(255,255,255,0.06),
+      inset -3px 0 0 rgba(255,255,255,0.06),
+      0 20px 40px rgba(0,0,0,0.4);
+  }
+  /* Subtle vertical aluminum brushed texture */
+  .lid::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    background:
+      linear-gradient(90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.04) 20%,
+        rgba(255,255,255,0) 40%,
+        rgba(255,255,255,0.03) 60%,
+        rgba(255,255,255,0) 100%);
+    pointer-events: none;
+  }
+
+  /* Camera notch */
+  .notch {
+    position: absolute;
+    top: 10px; left: 50%;
+    transform: translateX(-50%);
+    width: 380px; height: 44px;
+    background: #000;
+    border-radius: 0 0 22px 22px;
+    z-index: 2;
+    box-shadow: inset 0 -2px 0 rgba(255,255,255,0.08);
+  }
+  .notch::after {
+    content: '';
+    position: absolute;
+    top: 16px; left: 50%;
+    transform: translateX(-50%);
+    width: 14px; height: 14px;
+    background: radial-gradient(circle at 40% 35%, #1a1a1f, #050508);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px #000, 0 0 6px rgba(212,255,0,0.35);
+  }
+
+  /* Screen */
+  .screen {
+    aspect-ratio: 16 / 10;
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,0.04),
+      inset 0 0 80px rgba(0,0,0,0.55);
+  }
+  .screen video {
+    width: 100%; height: 100%; display: block;
+    object-fit: cover;
+    object-position: center top;
+  }
+  /* Screen diagonal glare */
+  .screen::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(108deg,
+      transparent 30%,
+      rgba(255,255,255,0.05) 48%,
+      rgba(255,255,255,0.02) 54%,
+      transparent 70%);
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  /* Laptop base (keyboard deck) */
+  .base {
+    width: 2800px;
+    height: 58px;
+    margin: -4px auto 0;
+    position: relative;
+    background:
+      linear-gradient(to bottom,
+        #3c3c44 0%,
+        #2a2a32 15%,
+        #161620 50%,
+        #0a0a10 85%,
+        #040408 100%);
+    border-radius: 6px 6px 42px 42px;
+    box-shadow:
+      0 14px 0 -3px rgba(0,0,0,0.45),
+      0 50px 70px -12px rgba(0,0,0,0.6);
+  }
+  .base::before {
+    /* hinge indent */
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 440px; height: 12px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 0 0 10px 10px;
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.8);
+  }
+  .base::after {
+    /* trackpad lip / cut-out hint */
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 620px; height: 10px;
+    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.55));
+    border-radius: 0 0 70px 70px;
+  }
+
+  /* Tiny reflection under the aluminum base */
+  .base-reflection {
+    position: absolute;
+    bottom: 350px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2600px; height: 18px;
+    background: linear-gradient(to bottom,
+      rgba(255,255,255,0.06) 0%, transparent 100%);
+    filter: blur(6px);
+    z-index: 4;
+  }
+
+  /* ══════════════════════ Props ══════════════════════ */
+
+  /* Notebook + pen — left side */
+  .notebook {
+    position: absolute;
+    left: 320px; bottom: 460px;
+    z-index: 4;
+    transform: rotate(-4deg);
+  }
+  /* Plant — right side */
+  .plant {
+    position: absolute;
+    right: 300px; bottom: 480px;
+    z-index: 4;
+  }
+
+  /* ══════════════════════ Text Overlays ══════════════════════ */
+  .brand {
+    position: absolute;
+    top: 140px; left: 180px;
+    color: var(--lime);
+    font-size: 26px;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    font-weight: 800;
+    z-index: 10;
+    display: flex; align-items: center; gap: 22px;
+    opacity: 0;
+    animation: fade-in 900ms ease-out 400ms forwards;
+  }
+  .brand-dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--lime);
+    box-shadow: 0 0 20px var(--lime), 0 0 40px rgba(212,255,0,0.5);
+  }
+  .brand-sub {
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.32em;
+  }
+
+  .timecode {
+    position: absolute;
+    top: 140px; right: 180px;
+    font-family: "SF Mono", ui-monospace, Menlo, monospace;
+    font-size: 22px;
+    letter-spacing: 0.22em;
+    color: rgba(255,255,255,0.45);
+    z-index: 10;
+    opacity: 0;
+    animation: fade-in 900ms ease-out 400ms forwards;
+  }
+  .timecode::before {
+    content: '●';
+    color: #ff4d4d;
+    margin-right: 14px;
+    animation: blink 1.5s steps(2) infinite;
+  }
+  @keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0.3} }
+
+  /* Decorative rule under brand */
+  .rule {
+    position: absolute;
+    top: 200px; left: 180px;
+    width: 180px; height: 1px;
+    background: linear-gradient(to right, var(--lime), transparent);
+    z-index: 10;
+    opacity: 0;
+    animation: rule-grow 1.2s cubic-bezier(0.22,1,0.36,1) 900ms forwards;
+    transform-origin: left;
+  }
+  @keyframes rule-grow {
+    from { opacity: 0; transform: scaleX(0); }
+    to   { opacity: 1; transform: scaleX(1); }
+  }
+
+  .tagline {
+    position: absolute;
+    bottom: 140px; left: 180px;
+    color: rgba(255,255,255,0.95);
+    font-size: 72px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    z-index: 10;
+    opacity: 0;
+    animation: slide-up 1s cubic-bezier(0.22, 1, 0.36, 1) 900ms forwards;
+  }
+  .tagline em { color: var(--lime); font-style: normal; }
+  .tagline small {
+    display: block;
+    font-size: 24px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 26px;
+  }
+
+  .meta {
+    position: absolute;
+    bottom: 140px; right: 180px;
+    text-align: right;
+    z-index: 10;
+    font-family: "SF Mono", ui-monospace, Menlo, monospace;
+    color: rgba(255,255,255,0.45);
+    font-size: 16px;
+    letter-spacing: 0.22em;
+    line-height: 2;
+    opacity: 0;
+    animation: fade-in 900ms ease-out 1400ms forwards;
+  }
+  .meta strong {
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+  }
+
+  @keyframes fade-in { to { opacity: 1; } }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+  <div class="scene">
+
+    <div class="brand">
+      <span class="brand-dot"></span>
+      MONO <span class="brand-sub">/ STUDIO</span>
+    </div>
+    <div class="rule"></div>
+    <div class="timecode">REC · 2026.04</div>
+
+    <div class="desk"></div>
+
+    <!-- Notebook + pen -->
+    <svg class="notebook" width="320" height="240" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="30" width="260" height="190" rx="6" fill="#12121a" stroke="#22222c" stroke-width="2"/>
+      <rect x="20" y="30" width="260" height="190" rx="6" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="4"/>
+      <!-- spiral binding -->
+      <g fill="#1a1a22">
+        <circle cx="40" cy="50"  r="4"/>
+        <circle cx="40" cy="80"  r="4"/>
+        <circle cx="40" cy="110" r="4"/>
+        <circle cx="40" cy="140" r="4"/>
+        <circle cx="40" cy="170" r="4"/>
+        <circle cx="40" cy="200" r="4"/>
+      </g>
+      <!-- lime accent -->
+      <rect x="60" y="55" width="180" height="3" fill="#d4ff00" opacity="0.6"/>
+      <rect x="60" y="75" width="120" height="2" fill="#ffffff" opacity="0.1"/>
+      <rect x="60" y="90" width="160" height="2" fill="#ffffff" opacity="0.08"/>
+      <!-- pen -->
+      <g transform="rotate(18 250 120)">
+        <rect x="230" y="105" width="160" height="12" rx="6" fill="#c4c4c8"/>
+        <rect x="230" y="105" width="40" height="12" rx="6" fill="#d4ff00"/>
+        <polygon points="390,105 410,111 390,117" fill="#5a5a62"/>
+      </g>
+    </svg>
+
+    <!-- Plant (more refined monstera-ish) -->
+    <svg class="plant" width="320" height="420" viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg">
+      <!-- Pot (matte concrete) -->
+      <defs>
+        <linearGradient id="pot" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#3a3a3f"/>
+          <stop offset="0.5" stop-color="#26262b"/>
+          <stop offset="1" stop-color="#0e0e13"/>
+        </linearGradient>
+      </defs>
+      <path d="M60 290 L260 290 L240 415 L80 415 Z" fill="url(#pot)" stroke="#1a1a1f" stroke-width="1.5"/>
+      <ellipse cx="160" cy="290" rx="100" ry="10" fill="#0a0a0f"/>
+      <ellipse cx="160" cy="290" rx="92" ry="7" fill="#141419"/>
+      <!-- Leaves (layered depth) -->
+      <g>
+        <path d="M160 290 Q110 200 70 130 Q105 160 130 240 Z" fill="#2d3a18"/>
+        <path d="M160 290 Q210 195 260 120 Q225 165 195 245 Z" fill="#3a4a22"/>
+        <path d="M160 290 Q140 210 120 130 Q158 180 155 265 Z" fill="#4a5d28"/>
+        <path d="M160 290 Q170 190 195 110 Q210 170 180 260 Z" fill="#5b7230"/>
+        <path d="M160 290 Q165 180 160 80 Q180 160 172 270 Z" fill="#6e8838"/>
+        <path d="M160 290 Q220 230 295 210 Q240 235 210 275 Z" fill="#4a5d28" opacity="0.85"/>
+      </g>
+    </svg>
+
+    <div class="shadow"></div>
+    <div class="base-reflection"></div>
+
+    <div class="laptop">
+      <div class="lid">
+        <div class="notch"></div>
+        <div class="screen">
+          <video id="v" autoplay muted playsinline src="videos/raw/raw-walkthrough.webm"></video>
+        </div>
+      </div>
+      <div class="base"></div>
+    </div>
+
+    <div class="tagline">
+      Built with <em>precision</em>.<br/>Shipped with <em>soul</em>.
+      <small>MONO Studio — Full-Stack Commerce</small>
+    </div>
+
+    <div class="meta">
+      <strong>Stripe Payments</strong><br/>
+      <strong>Admin Dashboard</strong><br/>
+      <strong>React · Node · MongoDB</strong>
+    </div>
+
+    <div class="vignette"></div>
+    <div class="grain"></div>
+  </div>
+
+  <script>
+    const v = document.getElementById('v');
+    v.addEventListener('loadeddata', () => document.body.dataset.ready = '1');
+    v.addEventListener('ended',      () => document.body.dataset.done  = '1');
+  </script>
+</body>
+</html>

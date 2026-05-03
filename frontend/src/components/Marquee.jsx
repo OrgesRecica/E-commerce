@@ -1,13 +1,21 @@
-export default function Marquee({ items, className = '' }) {
+export default function Marquee({ items, className = '', variant = 'default', speed = 'normal' }) {
+  const wrapper = {
+    default: 'bg-white text-bone border-y border-bone/10',
+    dark: 'bg-navy text-white border-y border-white/10',
+    navy: 'bg-navy text-white border-y border-white/10',
+  }[variant];
+
+  const animation = speed === 'fast' ? 'animate-marquee-fast' : 'animate-marquee';
+
   return (
-    <div className={`overflow-hidden py-6 border-y border-ink-600 bg-ink-800 ${className}`}>
-      <div className="flex w-max animate-marquee">
-        {[...items, ...items].map((item, i) => (
-          <div key={i} className="flex items-center gap-10 px-6">
-            <span className="text-3xl md:text-5xl font-extrabold tracking-tight whitespace-nowrap">
+    <div className={`marquee-host overflow-hidden py-6 ${wrapper} ${className}`} data-cursor="hover">
+      <div className={`marquee-track flex w-max ${animation}`}>
+        {[...items, ...items, ...items].map((item, i) => (
+          <div key={i} className="flex items-center gap-10 px-7">
+            <span className="text-2xl md:text-4xl font-extrabold tracking-normal whitespace-nowrap">
               {item}
             </span>
-            <span className="w-3 h-3 rounded-full bg-lime shrink-0" />
+            <span className="h-2.5 w-10 rounded-full bg-lime/90 shadow-glow" />
           </div>
         ))}
       </div>

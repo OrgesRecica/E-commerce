@@ -4,44 +4,64 @@ import { addItem } from '../store/cartSlice.js';
 export default function ProductCard({ product, index = 0 }) {
   const dispatch = useDispatch();
   const img = product.images?.[0]?.url;
+  const categoryLabel = (product.category || 'product').replace(/-/g, ' ');
+  const meter = 68 + ((index * 11) % 25);
+
   return (
-    <article
-      className="reveal group relative bg-ink-800 rounded-2xl overflow-hidden border border-ink-600 hover:border-lime/40 transition-colors"
-      data-delay={(index % 4) * 80}
-    >
-      <div className="relative aspect-[4/5] bg-ink-700 overflow-hidden">
+    <article className="reveal group card-tilt premium-panel flex flex-col p-3" data-delay={(index % 4) * 90}>
+      <div className="relative aspect-[4/5] overflow-hidden rounded-md bg-ink-700">
         {img ? (
-          <img
-            src={img}
-            alt={product.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[900ms] ease-out"
-          />
+          <img src={img} alt={product.title} className="w-full h-full object-cover transition duration-700 group-hover:scale-[1.035]" />
         ) : (
-          <div className="w-full h-full grid place-items-center text-ink-500 text-sm">No image</div>
+          <div className="w-full h-full grid place-items-center text-muted text-sm">No image</div>
         )}
-        {product.featured && (
-          <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-lime text-ink text-[10px] font-bold uppercase tracking-widest">
-            Featured
+
+        <div className="absolute inset-x-3 top-3 z-10 flex items-center justify-between">
+          <span className="rounded-md bg-navy/90 px-2.5 py-1 text-[10px] tracking-[0.18em] uppercase text-white font-bold">
+            {String(index + 1).padStart(2, '0')}
           </span>
-        )}
+          {product.featured && (
+            <span className="rounded-md bg-lime px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white">
+              Featured
+            </span>
+          )}
+        </div>
+
+        <div className="absolute inset-0 bg-gradient-to-t from-navy/75 via-navy/0 to-navy/0 opacity-0 group-hover:opacity-100 transition duration-500" />
+
         <button
-          onClick={() =>
-            dispatch(addItem({ productId: product._id, title: product.title, price: product.price, image: img }))
-          }
-          className="absolute bottom-3 right-3 h-10 px-4 rounded-full bg-bone text-ink text-xs font-semibold opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 flex items-center gap-2"
+          onClick={() => dispatch(addItem({ productId: product._id, title: product.title, price: product.price, image: img }))}
+          className="absolute left-3 right-3 bottom-3 z-10 h-11 rounded-md bg-white text-bone text-xs font-bold uppercase tracking-[0.14em] opacity-100 sm:opacity-0 sm:translate-y-3 sm:group-hover:opacity-100 sm:group-hover:translate-y-0 transition-all duration-500 flex items-center justify-center gap-3 shadow-card"
         >
-          Add to bag
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          Add to cart
+          <span className="block w-4 h-px bg-lime" />
         </button>
       </div>
-      <div className="p-4 flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-[10px] uppercase tracking-[0.2em] text-muted mb-1">
-            {product.category || 'Object'}
-          </p>
-          <h3 className="font-semibold truncate">{product.title}</h3>
+
+      <div className="pt-5 px-1 pb-1 flex-1 flex flex-col">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-[10px] uppercase tracking-[0.18em] text-muted mb-2 font-bold">
+              {categoryLabel}
+            </p>
+            <h3 className="font-bold text-bone text-[15px] leading-snug line-clamp-2">
+              <span className="link-underline">{product.title}</span>
+            </h3>
+          </div>
+          <span className="text-bone font-extrabold shrink-0 tabular text-[15px]">
+            €{product.price?.toFixed(2)}
+          </span>
         </div>
-        <span className="text-lime font-bold shrink-0">${product.price?.toFixed(2)}</span>
+
+        <div className="mt-5 rounded-md bg-ink-700 p-3">
+          <div className="flex justify-between text-[10px] uppercase tracking-[0.14em] text-muted font-bold mb-2">
+            <span>Run fit</span>
+            <span>{meter}%</span>
+          </div>
+          <div className="h-1.5 overflow-hidden rounded-full bg-white">
+            <div className="h-full rounded-full bg-gradient-to-r from-violet to-lime" style={{ width: `${meter}%` }} />
+          </div>
+        </div>
       </div>
     </article>
   );

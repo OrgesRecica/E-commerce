@@ -18,7 +18,11 @@ import contactRoutes from './src/routes/contact.routes.js';
 const app = express();
 
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+const allowedOrigins = [process.env.CLIENT_URL, 'http://localhost:5173', 'http://localhost:5174'].filter(Boolean);
+app.use(cors({
+  origin: (origin, cb) => cb(null, !origin || allowedOrigins.includes(origin)),
+  credentials: true,
+}));
 app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')));
 app.use(morgan('dev'));
 

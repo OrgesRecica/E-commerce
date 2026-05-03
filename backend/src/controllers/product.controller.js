@@ -20,16 +20,24 @@ async function uniqueSlug(base) {
   return `${base}-${Date.now().toString(36)}`;
 }
 
+const SORT_MAP = {
+  new: { createdAt: -1 },
+  'price-asc': { price: 1 },
+  'price-desc': { price: -1 },
+  popular: { rating: -1, numReviews: -1 },
+};
+
 export async function listProducts(req, res, next) {
   try {
-    const { q, category, featured, page = 1, limit = 20 } = req.query;
+    const { q, category, featured, sort = 'new', page = 1, limit = 20 } = req.query;
     const filter = {};
     if (category) filter.category = String(category).toLowerCase();
     if (featured === 'true') filter.featured = true;
     if (q) filter.$text = { $search: q };
+    const sortOrder = SORT_MAP[sort] || SORT_MAP.new;
     const skip = (Number(page) - 1) * Number(limit);
     const [items, total] = await Promise.all([
-      Product.find(filter).skip(skip).limit(Number(limit)).sort({ createdAt: -1 }),
+      Product.find(filter).skip(skip).limit(Number(limit)).sort(sortOrder),
       Product.countDocuments(filter),
     ]);
     res.json({ items, total, page: Number(page), limit: Number(limit) });

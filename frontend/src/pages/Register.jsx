@@ -3,12 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import api from '../api/axios.js';
 import { setCredentials } from '../store/authSlice.js';
+import Logo from '../components/Logo.jsx';
+import Magnetic from '../components/Magnetic.jsx';
 
 const perks = [
-  { t: 'Early access', d: 'Monday drops, one hour before the public.' },
-  { t: 'Studio notes', d: 'Weekly letters from makers we love.' },
-  { t: 'Saved wishlists', d: 'Bookmark pieces across sessions and devices.' },
-  { t: 'Free returns', d: 'Always — 30 days, any reason.' },
+  { t: 'Bulk pricing',     d: 'Competitive wholesale rates for retailers and businesses.' },
+  { t: 'Order tracking',   d: 'Real-time order status and delivery tracking on every purchase.' },
+  { t: 'Custom quotes',    d: 'Request tailored quotes for Private Label and bulk orders.' },
+  { t: 'Priority support', d: 'Dedicated account manager for orders above €1,000.' },
 ];
 
 export default function Register() {
@@ -34,74 +36,76 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen pt-24 grid lg:grid-cols-2">
-      <div className="flex items-center justify-center p-8 lg:p-16 order-2 lg:order-1">
+    <div className="min-h-screen pt-24 grid lg:grid-cols-12">
+      {/* Form */}
+      <div className="lg:col-span-7 flex items-center justify-center p-8 lg:p-20 bg-white order-2 lg:order-1">
         <div className="w-full max-w-md">
-          <p className="text-xs uppercase tracking-[0.3em] text-lime mb-4">Join MONO</p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-2">Create account.</h1>
-          <p className="text-muted mb-10">Already a member? <Link to="/login" className="text-lime hover:underline">Sign in</Link></p>
+          <p className="section-mark mb-6">Become a member</p>
+          <h1 className="kinetic text-display-md text-bone mb-3">Create account</h1>
+          <p className="text-bone-300 mb-12">
+            Already a member? <Link to="/login" className="text-lime link-underline font-medium">Sign in</Link>
+          </p>
 
-          <form onSubmit={submit} className="space-y-4">
+          <form onSubmit={submit} className="space-y-8">
             <label className="block">
-              <span className="text-xs uppercase tracking-[0.2em] text-muted">Full name</span>
+              <span className="text-xs uppercase tracking-[0.28em] text-muted">Full name</span>
               <input
-                required
-                value={form.name}
+                required value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="mt-2 w-full h-12 px-4 bg-ink-800 border border-ink-600 rounded-xl focus:border-lime outline-none"
+                className="mt-3 w-full h-12 bg-transparent border-b border-black/15 focus:border-bone outline-none text-bone"
               />
             </label>
             <label className="block">
-              <span className="text-xs uppercase tracking-[0.2em] text-muted">Email</span>
+              <span className="text-xs uppercase tracking-[0.28em] text-muted">Email</span>
               <input
-                required
-                type="email"
-                value={form.email}
+                required type="email" value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="mt-2 w-full h-12 px-4 bg-ink-800 border border-ink-600 rounded-xl focus:border-lime outline-none"
+                className="mt-3 w-full h-12 bg-transparent border-b border-black/15 focus:border-bone outline-none text-bone"
               />
             </label>
             <label className="block">
-              <span className="text-xs uppercase tracking-[0.2em] text-muted">Password (min. 6)</span>
+              <span className="text-xs uppercase tracking-[0.28em] text-muted">Password — min. 6</span>
               <input
-                required
-                type="password"
-                minLength={6}
-                value={form.password}
+                required type="password" minLength={6} value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="mt-2 w-full h-12 px-4 bg-ink-800 border border-ink-600 rounded-xl focus:border-lime outline-none"
+                className="mt-3 w-full h-12 bg-transparent border-b border-black/15 focus:border-bone outline-none text-bone"
               />
             </label>
 
-            {error && <p className="p-3 rounded-xl bg-coral/10 border border-coral/30 text-coral text-sm">{error}</p>}
+            {error && <div className="text-sm text-coral">— {error}</div>}
 
-            <p className="text-xs text-muted">
-              By creating an account you agree to our <a href="#" className="underline">terms</a> and{' '}
-              <a href="#" className="underline">privacy policy</a>.
+            <p className="text-xs text-bone-300 leading-relaxed">
+              By creating an account you agree to our <a href="#" className="link-underline text-bone">terms</a> and{' '}
+              <a href="#" className="link-underline text-bone">privacy policy</a>.
             </p>
 
-            <button
-              disabled={loading}
-              className="w-full h-14 rounded-full bg-lime text-ink font-semibold hover:bg-lime-600 transition disabled:opacity-60"
-            >
-              {loading ? 'Creating...' : 'Create account →'}
-            </button>
+            <Magnetic>
+              <button disabled={loading} className="btn-primary w-full justify-between h-14 disabled:opacity-50">
+                {loading ? 'Creating…' : 'Create account →'}
+              </button>
+            </Magnetic>
           </form>
         </div>
       </div>
 
-      <div className="relative hidden lg:block order-1 lg:order-2 bg-gradient-to-br from-violet/30 via-ink-800 to-ink">
-        <div className="absolute inset-0 p-12 flex flex-col justify-center">
-          <div className="max-w-md mx-auto">
-            <p className="text-xs uppercase tracking-[0.3em] text-lime mb-6">Members only</p>
-            <h2 className="text-4xl font-bold mb-10">Four small perks<br/>for joining us.</h2>
-            <div className="space-y-6">
+      {/* Brand panel */}
+      <div className="relative hidden lg:block lg:col-span-5 bg-bone text-white overflow-hidden order-1 lg:order-2">
+        <div className="absolute inset-0 dot-grid opacity-10" />
+
+        <div className="relative h-full p-12 flex flex-col justify-between">
+          <Logo size={48} textSize="text-2xl" variant="light" />
+          <div>
+            <p className="text-xs uppercase tracking-[0.32em] text-lime mb-8">Member benefits</p>
+            <h2 className="kinetic text-4xl lg:text-5xl font-light tracking-normal mb-12 leading-tight">
+              Four reasons to <em className="text-lime">join</em>.
+            </h2>
+            <div className="space-y-px bg-white/10">
               {perks.map((p, i) => (
-                <div key={p.t} className="flex gap-4">
-                  <span className="text-lime font-mono text-sm pt-1">0{i + 1}</span>
+                <div key={p.t} className="bg-bone p-5 flex gap-5 items-start">
+                  <span className="text-xs text-white/40 tabular tracking-[0.28em] w-8 pt-1">{String(i + 1).padStart(2, '0')}</span>
                   <div>
-                    <h3 className="font-semibold mb-1">{p.t}</h3>
-                    <p className="text-sm text-muted">{p.d}</p>
+                    <h3 className="font-medium tracking-normal mb-1">{p.t}</h3>
+                    <p className="text-sm text-white/60 leading-relaxed">{p.d}</p>
                   </div>
                 </div>
               ))}

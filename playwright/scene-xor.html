@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>XOR — Mockup Scene</title>
+<style>
+  :root {
+    --bg-0: #000000;
+    --bg-1: #050812;
+    --bg-2: #0b1220;
+    --cyan: #2de0ff;      /* primary brand accent */
+    --cyan-soft: #61dafb; /* React-like softer tint */
+    --white: #ffffff;
+    --muted: rgba(255,255,255,0.55);
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; overflow: hidden;
+    background: #000;
+    font-family: "Inter", -apple-system, "SF Pro Display", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01";
+  }
+
+  /* ═══════════════════ 4K CANVAS (3840 × 2400) — 16:10 ═══════════════════ */
+  .scene {
+    width: 3840px; height: 2400px;
+    position: relative;
+    background:
+      radial-gradient(ellipse 1800px 1200px at 50% 20%, #0c1424 0%, #050810 60%, #000 100%);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Soft cyan light from top-center */
+  .scene::before {
+    content: '';
+    position: absolute;
+    top: -400px; left: 50%;
+    transform: translateX(-50%);
+    width: 3400px; height: 1600px;
+    background: radial-gradient(ellipse, rgba(45,224,255,0.13) 0%, rgba(45,224,255,0.03) 40%, transparent 70%);
+    pointer-events: none;
+    filter: blur(20px);
+    z-index: 1;
+  }
+
+  /* Rim light behind laptop */
+  .scene::after {
+    content: '';
+    position: absolute;
+    bottom: 500px; left: 50%;
+    transform: translateX(-50%);
+    width: 2600px; height: 1100px;
+    background: radial-gradient(ellipse, rgba(45,224,255,0.18) 0%, transparent 55%);
+    pointer-events: none;
+    filter: blur(30px);
+    z-index: 1;
+  }
+
+  /* Vignette */
+  .vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 3000px 1800px at 50% 55%, transparent 42%, rgba(0,0,0,0.8) 100%);
+    pointer-events: none;
+    z-index: 30;
+  }
+
+  /* Dotted grid — subtle texture */
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(rgba(45,224,255,0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: 0 0;
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 2;
+    mask-image: radial-gradient(ellipse 2600px 1600px at 50% 55%, #000 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 2600px 1600px at 50% 55%, #000 20%, transparent 70%);
+  }
+
+  /* ═══════════════════ Matte dark desk ═══════════════════ */
+  .desk {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 900px;
+    z-index: 3;
+    background:
+      linear-gradient(to bottom,
+        #0c1220 0%,
+        #060a14 40%,
+        #020308 100%);
+  }
+  .desk::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(to right, transparent 10%, rgba(45,224,255,0.35) 50%, transparent 90%);
+    filter: blur(0.5px);
+  }
+  /* Cyan glow on desk below laptop */
+  .desk::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 2400px; height: 500px;
+    background: radial-gradient(ellipse, rgba(45,224,255,0.10) 0%, transparent 70%);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+
+  /* Shadow pool under laptop */
+  .shadow {
+    position: absolute;
+    bottom: 440px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2700px; height: 200px;
+    background: radial-gradient(ellipse, rgba(0,0,0,0.85) 0%, transparent 65%);
+    filter: blur(55px);
+    z-index: 4;
+  }
+
+  /* ═══════════════════ Laptop ═══════════════════ */
+  .laptop {
+    position: absolute;
+    left: 50%;
+    bottom: 380px;
+    transform: translateX(-50%);
+    z-index: 6;
+    filter: drop-shadow(0 40px 80px rgba(0,0,0,0.6)) drop-shadow(0 0 60px rgba(45,224,255,0.18));
+  }
+
+  /* Screen lid — cool silver aluminum */
+  .lid {
+    width: 2720px;
+    padding: 54px 54px 62px;
+    border-radius: 36px 36px 8px 8px;
+    position: relative;
+    background:
+      linear-gradient(to bottom,
+        #4d5562 0%,
+        #3a4150 14%,
+        #222831 42%,
+        #131821 72%,
+        #0a0e15 100%);
+    box-shadow:
+      inset  0  3px 0 rgba(255,255,255,0.22),
+      inset  0 -3px 0 rgba(0,0,0,0.55),
+      inset  3px 0 0 rgba(255,255,255,0.08),
+      inset -3px 0 0 rgba(255,255,255,0.08),
+      0 20px 50px rgba(0,0,0,0.5);
+  }
+  /* Brushed-metal vertical sheen */
+  .lid::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    background:
+      linear-gradient(90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.06) 22%,
+        rgba(255,255,255,0) 44%,
+        rgba(255,255,255,0.04) 68%,
+        rgba(255,255,255,0) 100%);
+    pointer-events: none;
+  }
+
+  /* Camera notch with cyan glint */
+  .notch {
+    position: absolute;
+    top: 8px; left: 50%;
+    transform: translateX(-50%);
+    width: 360px; height: 42px;
+    background: #000;
+    border-radius: 0 0 22px 22px;
+    z-index: 2;
+    box-shadow: inset 0 -2px 0 rgba(255,255,255,0.08);
+  }
+  .notch::after {
+    content: '';
+    position: absolute;
+    top: 14px; left: 50%;
+    transform: translateX(-50%);
+    width: 14px; height: 14px;
+    background: radial-gradient(circle at 40% 35%, #1a2028, #050508);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px #000, 0 0 8px rgba(45,224,255,0.55);
+  }
+
+  /* Screen */
+  .screen {
+    aspect-ratio: 16 / 10;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,0.04),
+      inset 0 0 80px rgba(0,0,0,0.55);
+  }
+  .screen img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+  /* Diagonal glare */
+  .screen::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(108deg,
+      transparent 35%,
+      rgba(255,255,255,0.04) 50%,
+      transparent 65%);
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  /* Base / keyboard deck */
+  .base {
+    width: 2800px;
+    height: 56px;
+    margin: -4px auto 0;
+    position: relative;
+    background:
+      linear-gradient(to bottom,
+        #40485a 0%,
+        #2d3444 15%,
+        #171d28 50%,
+        #0a0e15 85%,
+        #03050a 100%);
+    border-radius: 6px 6px 40px 40px;
+    box-shadow:
+      0 14px 0 -3px rgba(0,0,0,0.45),
+      0 50px 70px -12px rgba(0,0,0,0.6);
+  }
+  .base::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 440px; height: 12px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 0 0 10px 10px;
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.8);
+  }
+  .base::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 620px; height: 10px;
+    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.55));
+    border-radius: 0 0 70px 70px;
+  }
+
+  /* ═══════════════════ Text / Brand Overlays ═══════════════════ */
+  .brand {
+    position: absolute;
+    top: 160px; left: 200px;
+    z-index: 10;
+    display: flex; align-items: center; gap: 28px;
+  }
+  .brand svg { width: 80px; height: 80px; filter: drop-shadow(0 0 12px rgba(45,224,255,0.6)); }
+  .brand-text {
+    color: var(--white);
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    line-height: 1;
+  }
+  .brand-text .sub {
+    display: block;
+    color: var(--cyan);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    margin-top: 10px;
+  }
+
+  .rule {
+    position: absolute;
+    top: 266px; left: 200px;
+    width: 220px; height: 2px;
+    background: linear-gradient(to right, var(--cyan), transparent);
+    z-index: 10;
+  }
+
+  .feature-tag {
+    position: absolute;
+    top: 180px; right: 200px;
+    text-align: right;
+    z-index: 10;
+    font-family: "SF Mono", ui-monospace, Menlo, monospace;
+    color: rgba(255,255,255,0.6);
+    font-size: 16px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    line-height: 1.8;
+  }
+  .feature-tag strong {
+    display: block;
+    color: var(--cyan);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    margin-bottom: 4px;
+  }
+
+  .tagline {
+    position: absolute;
+    bottom: 160px; left: 200px;
+    z-index: 10;
+    color: rgba(255,255,255,0.96);
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .tagline em { color: var(--cyan); font-style: normal; }
+  .tagline small {
+    display: block;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.26em;
+    margin-top: 30px;
+    text-transform: uppercase;
+  }
+
+  .credits {
+    position: absolute;
+    bottom: 180px; right: 200px;
+    text-align: right;
+    z-index: 10;
+    font-family: "SF Mono", ui-monospace, Menlo, monospace;
+    color: rgba(255,255,255,0.45);
+    font-size: 16px;
+    letter-spacing: 0.22em;
+    line-height: 2;
+  }
+  .credits strong { color: rgba(255,255,255,0.85); font-weight: 500; }
+  .credits .dot { color: var(--cyan); }
+
+  /* Bottom ticker/URL */
+  .url {
+    position: absolute;
+    bottom: 80px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    font-family: "SF Mono", ui-monospace, Menlo, monospace;
+    color: rgba(255,255,255,0.35);
+    font-size: 18px;
+    letter-spacing: 0.48em;
+    text-transform: uppercase;
+  }
+  .url span { color: var(--cyan); }
+</style>
+</head>
+<body>
+  <div class="scene">
+    <div class="grid"></div>
+
+    <!-- XOR brand (top-left) -->
+    <div class="brand">
+      <!-- Stylised atom / orbit mark -->
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2de0ff" stroke-width="3">
+        <circle cx="50" cy="50" r="8" fill="#2de0ff"/>
+        <ellipse cx="50" cy="50" rx="44" ry="18"/>
+        <ellipse cx="50" cy="50" rx="44" ry="18" transform="rotate(60 50 50)"/>
+        <ellipse cx="50" cy="50" rx="44" ry="18" transform="rotate(120 50 50)"/>
+      </svg>
+      <div class="brand-text">
+        XOR DEV
+        <span class="sub">/ DEVELOPMENT STUDIO</span>
+      </div>
+    </div>
+    <div class="rule"></div>
+
+    <!-- Feature tag (top-right, injected per-mockup) -->
+    <div class="feature-tag" id="feature">
+      <strong>FEATURE</strong>
+      MONO · E-COMMERCE
+    </div>
+
+    <div class="desk"></div>
+    <div class="shadow"></div>
+
+    <div class="laptop">
+      <div class="lid">
+        <div class="notch"></div>
+        <div class="screen">
+          <img id="shot" alt="feature" />
+        </div>
+      </div>
+      <div class="base"></div>
+    </div>
+
+    <div class="tagline">
+      We Build<br/><em>Digital Futures</em>.
+      <small>MONO — Full-Stack Commerce</small>
+    </div>
+
+    <div class="credits">
+      <strong>REACT</strong> <span class="dot">·</span> <strong>NODE</strong> <span class="dot">·</span> <strong>MONGODB</strong><br/>
+      <strong>STRIPE</strong> <span class="dot">·</span> <strong>JWT AUTH</strong><br/>
+      <strong>ADMIN DASHBOARD</strong>
+    </div>
+
+    <div class="url"><span>→</span>&nbsp;&nbsp;XOR.LLC&nbsp;&nbsp;<span>·</span>&nbsp;&nbsp;CODE · CREATE · GROW</div>
+
+    <div class="vignette"></div>
+  </div>
+
+  <script>
+    // Read ?img= and ?tag= from URL
+    const params = new URLSearchParams(location.search);
+    const imgUrl = params.get('img');
+    const tag = params.get('tag') || 'MONO · FEATURE';
+    const label = params.get('label') || 'E-COMMERCE';
+
+    const img = document.getElementById('shot');
+    img.src = imgUrl;
+    img.onload = () => (document.body.dataset.ready = '1');
+    img.onerror = () => (document.body.dataset.error = '1');
+
+    document.getElementById('feature').innerHTML =
+      `<strong>${label}</strong>${tag}`;
+  </script>
+</body>
+</html>

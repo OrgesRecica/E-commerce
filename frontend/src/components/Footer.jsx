@@ -1,67 +1,101 @@
 import { Link } from 'react-router-dom';
+import Logo from './Logo.jsx';
+import Magnetic from './Magnetic.jsx';
 
 export default function Footer() {
   return (
-    <footer className="relative z-[2] mt-24 border-t border-ink-600 bg-ink-800">
-      <div className="container mx-auto px-4 py-16 max-w-7xl">
-        <div className="grid md:grid-cols-12 gap-10">
-          <div className="md:col-span-5">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-full bg-lime grid place-items-center text-ink font-black">M</div>
-              <span className="font-extrabold tracking-tight text-2xl">MONO</span>
+    <footer className="relative overflow-hidden bg-navy-900 text-white">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-lime to-transparent" />
+      <div className="absolute -right-24 top-16 h-80 w-80 rounded-full bg-lime/10 blur-3xl" />
+
+      <div className="relative container mx-auto px-5 max-w-[88rem] pt-20 pb-12">
+        <div className="rounded-lg border border-white/10 bg-white/10 p-6 md:p-10 mb-16">
+          <div className="grid lg:grid-cols-12 gap-8 items-end">
+            <div className="lg:col-span-7">
+              <p className="text-xs uppercase tracking-[0.22em] text-lime mb-5 font-bold">Talk to us</p>
+              <h2 className="text-3xl md:text-5xl font-extrabold leading-tight">
+                Let's engineer your next packaging run.
+              </h2>
             </div>
-            <p className="text-muted text-sm leading-relaxed max-w-sm">
-              A curated modern store. We source the most considered objects of our time, from
-              independent makers and design-forward brands.
+            <div className="lg:col-span-5 flex items-end justify-start lg:justify-end">
+              <Magnetic>
+                <Link to="/contact" className="btn-primary h-14 px-8">
+                  Get in touch
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <path d="M5 12h14M13 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </Magnetic>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-12 gap-10 pb-12 border-y border-white/10 py-14">
+          <div className="lg:col-span-4">
+            <Logo size={42} textSize="text-lg" variant="light" />
+            <p className="mt-6 text-sm text-white/70 leading-relaxed max-w-xs">
+              Sustainable packaging from 100% recycled materials. ISO 9001 certified.
+              Founded 1999 in Drenas, Kosovo.
             </p>
-            <div className="mt-6 flex gap-3">
-              {['Instagram', 'Twitter', 'Pinterest', 'TikTok'].map((s) => (
-                <a key={s} href="#" className="w-10 h-10 grid place-items-center rounded-full border border-ink-600 text-xs hover:border-lime hover:text-lime transition">
-                  {s[0]}
+          </div>
+
+          <div className="lg:col-span-3">
+            <h4 className="text-xs uppercase tracking-[0.22em] text-lime mb-5 font-bold">Headquarters</h4>
+            <p className="text-sm text-white/70 leading-relaxed">
+              Industrial Business Park<br />
+              Drenas, Kosovo
+            </p>
+            <a href="mailto:info@scampa.eu" className="block mt-5 text-sm text-white hover:text-lime transition link-underline">
+              info@scampa.eu
+            </a>
+            <div className="mt-3 space-y-1 text-sm text-white/70">
+              <a href="tel:+38345265760" className="block hover:text-lime transition tabular">+383 45 265 760</a>
+              <a href="tel:+38345265765" className="block hover:text-lime transition tabular">+383 45 265 765</a>
+              <a href="tel:+38338500666" className="block hover:text-lime transition tabular">+383 38 500 666</a>
+            </div>
+          </div>
+
+          <div className="lg:col-span-2">
+            <h4 className="text-xs uppercase tracking-[0.22em] text-lime mb-5 font-bold">Products</h4>
+            <ul className="space-y-3 text-sm text-white/70">
+              <li><Link to="/products" className="hover:text-lime transition link-underline">Shopping Bags</Link></li>
+              <li><Link to="/products" className="hover:text-lime transition link-underline">Garbage Bags</Link></li>
+              <li><Link to="/products" className="hover:text-lime transition link-underline">Packing Rolls</Link></li>
+              <li><Link to="/products" className="hover:text-lime transition link-underline">Custom Orders</Link></li>
+            </ul>
+          </div>
+
+          <div className="lg:col-span-3">
+            <h4 className="text-xs uppercase tracking-[0.22em] text-lime mb-5 font-bold">Company</h4>
+            <ul className="space-y-3 text-sm text-white/70">
+              <li><Link to="/about" className="hover:text-lime transition link-underline">About Us</Link></li>
+              <li><Link to="/clients" className="hover:text-lime transition link-underline">Our Clients</Link></li>
+              <li><Link to="/news" className="hover:text-lime transition link-underline">Journal</Link></li>
+              <li><Link to="/contact" className="hover:text-lime transition link-underline">Contact</Link></li>
+              <li><a href="#" className="hover:text-lime transition link-underline">Powerpack LLC</a></li>
+            </ul>
+
+            <div className="mt-8 flex gap-3">
+              {[
+                { label: 'Facebook', short: 'Fb' },
+                { label: 'Instagram', short: 'Ig' },
+                { label: 'LinkedIn', short: 'Li' },
+              ].map((s) => (
+                <a key={s.label} href="#" aria-label={s.label} className="w-10 h-10 grid place-items-center rounded-md border border-white/20 hover:border-lime hover:text-lime transition text-xs font-semibold">
+                  {s.short}
                 </a>
               ))}
             </div>
           </div>
-
-          <div className="md:col-span-2">
-            <h4 className="text-xs uppercase tracking-[0.2em] text-muted mb-4">Shop</h4>
-            <ul className="space-y-2 text-sm">
-              <li><Link to="/products" className="hover:text-lime">All products</Link></li>
-              <li><Link to="/products" className="hover:text-lime">New arrivals</Link></li>
-              <li><Link to="/products" className="hover:text-lime">Best sellers</Link></li>
-              <li><Link to="/products" className="hover:text-lime">Sale</Link></li>
-            </ul>
-          </div>
-
-          <div className="md:col-span-2">
-            <h4 className="text-xs uppercase tracking-[0.2em] text-muted mb-4">Company</h4>
-            <ul className="space-y-2 text-sm">
-              <li><Link to="/about" className="hover:text-lime">About</Link></li>
-              <li><Link to="/contact" className="hover:text-lime">Contact</Link></li>
-              <li><a href="#" className="hover:text-lime">Careers</a></li>
-              <li><a href="#" className="hover:text-lime">Press</a></li>
-            </ul>
-          </div>
-
-          <div className="md:col-span-3">
-            <h4 className="text-xs uppercase tracking-[0.2em] text-muted mb-4">Newsletter</h4>
-            <p className="text-sm text-muted mb-4">Weekly drops, no noise.</p>
-            <form className="flex gap-2">
-              <input type="email" placeholder="you@domain.com" className="flex-1 bg-ink border border-ink-600 rounded-full px-4 py-2 text-sm focus:border-lime outline-none" />
-              <button className="w-10 h-10 rounded-full bg-lime text-ink grid place-items-center hover:bg-lime-600 transition" aria-label="Subscribe">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-              </button>
-            </form>
-          </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-ink-600 flex flex-wrap justify-between items-center gap-4 text-xs text-muted">
-          <p>&copy; {new Date().getFullYear()} MONO Studio. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-bone">Privacy</a>
-            <a href="#" className="hover:text-bone">Terms</a>
-            <a href="#" className="hover:text-bone">Shipping</a>
-            <a href="#" className="hover:text-bone">Returns</a>
+        <div className="flex flex-wrap justify-between items-center gap-4 pt-8 text-xs text-white/40 uppercase tracking-[0.18em]">
+          <p>&copy; {new Date().getFullYear()} SCAMPA Manufacturing & Trading Co.</p>
+          <div className="flex flex-wrap gap-6">
+            <a href="#" className="hover:text-white transition">Privacy</a>
+            <a href="#" className="hover:text-white transition">Terms</a>
+            <a href="#" className="hover:text-white transition">ISO 9001</a>
+            <a href="#" className="hover:text-white transition">Sustainability</a>
           </div>
         </div>
       </div>

@@ -8,6 +8,8 @@ import Products from './pages/Products.jsx';
 import Cart from './pages/Cart.jsx';
 import About from './pages/About.jsx';
 import Contact from './pages/Contact.jsx';
+import Clients from './pages/Clients.jsx';
+import News from './pages/News.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Admin from './pages/Admin.jsx';
@@ -22,7 +24,7 @@ export default function App() {
   useScrollProgress();
 
   return (
-    <div className="grain flex flex-col min-h-screen relative">
+    <div className="flex flex-col min-h-screen relative">
       <ScrollProgress />
       <Navbar />
       <main className="flex-1 relative z-[2]">
@@ -32,6 +34,8 @@ export default function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/clients" element={<Clients />} />
+          <Route path="/news" element={<News />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<Admin />} />
