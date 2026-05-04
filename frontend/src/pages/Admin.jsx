@@ -49,6 +49,15 @@ function NavItem({ label, active, onClick }) {
   );
 }
 
+const escapeHtml = (value) => String(value ?? '')
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;');
+
+const invoiceNumber = (order) => `SC-${new Date(order.createdAt).getFullYear()}-${order._id.slice(-8).toUpperCase()}`;
+
 export default function Admin() {
   const { user } = useSelector((s) => s.auth);
   const qc = useQueryClient();
@@ -57,6 +66,7 @@ export default function Admin() {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [createStatus, setCreateStatus] = useState(null);
+  const [productToDelete, setProductToDelete] = useState(null);
 
   if (!user) return <Navigate to="/login" replace />;
   if (user.role !== 'admin') return <Navigate to="/" replace />;
@@ -92,6 +102,38 @@ export default function Admin() {
 
   const removeProduct = useMutation({
     mutationFn: async (id) => (await api.delete(`/products/${id}`)).data,
+    onMutate: async (id) => {
+      await qc.cancelQueries({ queryKey: ['admin-products'] });
+      await qc.cancelQueries({ queryKey: ['products'] });
+
+      const previousAdminProducts = qc.getQueryData(['admin-products']);
+      const previousProductQueries = qc.getQueriesData({ queryKey: ['products'] });
+      const removeFromList = (old) => {
+        if (!old) return old;
+        if (Array.isArray(old)) return old.filter((product) => product._id !== id);
+        if (Array.isArray(old.items)) {
+          const nextItems = old.items.filter((product) => product._id !== id);
+          return {
+            ...old,
+            items: nextItems,
+            total: typeof old.total === 'number' ? Math.max(0, old.total - (old.items.length - nextItems.length)) : old.total,
+          };
+        }
+        return old;
+      };
+
+      qc.setQueryData(['admin-products'], removeFromList);
+      qc.setQueriesData({ queryKey: ['products'] }, removeFromList);
+
+      return { previousAdminProducts, previousProductQueries };
+    },
+    onError: (_err, _id, context) => {
+      if (!context) return;
+      qc.setQueryData(['admin-products'], context.previousAdminProducts);
+      context.previousProductQueries?.forEach(([queryKey, data]) => {
+        qc.setQueryData(queryKey, data);
+      });
+    },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['products'] });
       qc.invalidateQueries({ queryKey: ['admin-products'] });
@@ -128,8 +170,246 @@ export default function Admin() {
     createProduct.mutate(fd);
   };
 
+  const confirmDeleteProduct = () => {
+    if (!productToDelete) return;
+    removeProduct.mutate(productToDelete._id, {
+      onSettled: () => setProductToDelete(null),
+    });
+  };
+
   const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n || 0);
+  const fmtInvoiceMoney = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(n || 0);
   const fmtDate = (d) => new Date(d).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+  const fmtDateTime = (d) => new Date(d).toLocaleString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  const printOrderInvoice = (order) => {
+    const buyer = order.shippingAddress || {};
+    const subtotal = order.items?.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 0), 0) || order.total || 0;
+    const shipping = Math.max(0, (order.total || 0) - subtotal);
+    const rows = (order.items || []).map((item, index) => {
+      const lineTotal = (item.price || 0) * (item.quantity || 0);
+      return `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${escapeHtml(item.title || 'Product')}</td>
+          <td class="numeric">${item.quantity || 0}</td>
+          <td class="numeric">${fmtInvoiceMoney(item.price)}</td>
+          <td class="numeric">${fmtInvoiceMoney(lineTotal)}</td>
+        </tr>
+      `;
+    }).join('');
+
+    const invoiceWindow = window.open('', '_blank', 'width=900,height=1100');
+    if (!invoiceWindow) return;
+
+    invoiceWindow.document.write(`
+      <!doctype html>
+      <html>
+        <head>
+          <meta charset="utf-8" />
+          <title>Fature ${escapeHtml(invoiceNumber(order))}</title>
+          <style>
+            * { box-sizing: border-box; }
+            body {
+              margin: 0;
+              background: #eef3fb;
+              color: #071f45;
+              font-family: Arial, Helvetica, sans-serif;
+              line-height: 1.45;
+            }
+            .page {
+              width: 210mm;
+              min-height: 297mm;
+              margin: 24px auto;
+              padding: 22mm;
+              background: #fff;
+              box-shadow: 0 24px 70px rgba(7, 31, 69, 0.18);
+            }
+            header {
+              display: flex;
+              justify-content: space-between;
+              gap: 32px;
+              border-bottom: 2px solid #ff7a1a;
+              padding-bottom: 24px;
+            }
+            .logo { width: 190px; height: auto; }
+            .invoice-title { text-align: right; }
+            h1 {
+              margin: 0 0 8px;
+              font-size: 34px;
+              letter-spacing: 0.08em;
+              text-transform: uppercase;
+            }
+            .muted { color: #66758e; }
+            .meta {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 22px;
+              margin: 34px 0;
+            }
+            .box {
+              border: 1px solid #dbe4f0;
+              padding: 18px;
+              min-height: 145px;
+            }
+            .label {
+              margin-bottom: 10px;
+              color: #ff7a1a;
+              font-size: 11px;
+              font-weight: 700;
+              letter-spacing: 0.16em;
+              text-transform: uppercase;
+            }
+            p { margin: 3px 0; }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 8px;
+            }
+            th {
+              border-bottom: 1px solid #071f45;
+              padding: 12px 8px;
+              color: #66758e;
+              font-size: 11px;
+              letter-spacing: 0.12em;
+              text-align: left;
+              text-transform: uppercase;
+            }
+            td {
+              border-bottom: 1px solid #e8eef6;
+              padding: 14px 8px;
+              vertical-align: top;
+            }
+            .numeric { text-align: right; font-variant-numeric: tabular-nums; }
+            .totals {
+              margin-left: auto;
+              margin-top: 26px;
+              width: 330px;
+            }
+            .total-row {
+              display: flex;
+              justify-content: space-between;
+              gap: 20px;
+              padding: 9px 0;
+              border-bottom: 1px solid #e8eef6;
+            }
+            .grand {
+              margin-top: 8px;
+              padding-top: 14px;
+              border-top: 2px solid #071f45;
+              font-size: 22px;
+              font-weight: 700;
+            }
+            footer {
+              margin-top: 48px;
+              padding-top: 18px;
+              border-top: 1px solid #dbe4f0;
+              color: #66758e;
+              font-size: 12px;
+            }
+            .print-actions {
+              width: 210mm;
+              margin: 20px auto 0;
+              display: flex;
+              justify-content: flex-end;
+              gap: 10px;
+            }
+            button {
+              border: 0;
+              border-radius: 6px;
+              padding: 12px 18px;
+              background: #ff7a1a;
+              color: #fff;
+              font-weight: 700;
+              cursor: pointer;
+            }
+            button.secondary { background: #071f45; }
+            @page { size: A4; margin: 0; }
+            @media print {
+              body { background: #fff; }
+              .page { margin: 0; box-shadow: none; width: auto; min-height: auto; }
+              .print-actions { display: none; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="print-actions">
+            <button class="secondary" onclick="window.close()">Close</button>
+            <button onclick="window.print()">Print</button>
+          </div>
+          <main class="page">
+            <header>
+              <div>
+                <img class="logo" src="${window.location.origin}/assets/scampa-logo.svg" alt="SCAMPA" />
+                <p><strong>SCAMPA Manufacturing & Trading Co.</strong></p>
+                <p class="muted">Industrial Business Park, Drenas, Kosovo</p>
+                <p class="muted">info@scampa.eu</p>
+                <p class="muted">+383 45 265 760</p>
+              </div>
+              <div class="invoice-title">
+                <h1>Fature</h1>
+                <p><strong>${escapeHtml(invoiceNumber(order))}</strong></p>
+                <p class="muted">Order #${escapeHtml(order._id.slice(-8).toUpperCase())}</p>
+              </div>
+            </header>
+
+            <section class="meta">
+              <div class="box">
+                <div class="label">Buyer</div>
+                <p><strong>${escapeHtml(buyer.fullName || order.userId?.name || 'Customer')}</strong></p>
+                <p>${escapeHtml(buyer.email || order.userId?.email || '')}</p>
+                <p>${escapeHtml(buyer.phone || '')}</p>
+                <p>${escapeHtml(buyer.line1 || '')}</p>
+                <p>${escapeHtml([buyer.city, buyer.postalCode, buyer.country].filter(Boolean).join(', '))}</p>
+              </div>
+              <div class="box">
+                <div class="label">Order details</div>
+                <p><strong>Purchase date:</strong> ${escapeHtml(fmtDateTime(order.createdAt))}</p>
+                <p><strong>Invoice date:</strong> ${escapeHtml(fmtDateTime(new Date()))}</p>
+                <p><strong>Status:</strong> ${escapeHtml(order.status)}</p>
+                <p><strong>Payment ID:</strong> ${escapeHtml(order.paymentIntentId || 'Not available')}</p>
+              </div>
+            </section>
+
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 48px;">No.</th>
+                  <th>Product</th>
+                  <th class="numeric">Qty</th>
+                  <th class="numeric">Unit price</th>
+                  <th class="numeric">Line total</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+
+            <section class="totals">
+              <div class="total-row"><span>Subtotal</span><strong>${fmtInvoiceMoney(subtotal)}</strong></div>
+              <div class="total-row"><span>Shipping / handling</span><strong>${fmtInvoiceMoney(shipping)}</strong></div>
+              <div class="total-row"><span>VAT / Tax</span><strong>Included where applicable</strong></div>
+              <div class="total-row grand"><span>Total</span><span>${fmtInvoiceMoney(order.total)}</span></div>
+            </section>
+
+            <footer>
+              <p>This document was generated from the SCAMPA admin dashboard for order fulfilment and customer records.</p>
+              <p>Thank you for choosing SCAMPA.</p>
+            </footer>
+          </main>
+          <script>
+            window.addEventListener('load', () => setTimeout(() => window.print(), 250));
+          </script>
+        </body>
+      </html>
+    `);
+    invoiceWindow.document.close();
+  };
 
   return (
     <div className="min-h-screen page-top flex bg-ink-800">
@@ -258,13 +538,22 @@ export default function Admin() {
                       </div>
                       <div className="flex flex-col items-end gap-3 shrink-0">
                         <span className="text-2xl font-light text-bone tabular tracking-normal">{fmt(order.total)}</span>
-                        <select
-                          value={order.status}
-                          onChange={(e) => updateStatus.mutate({ id: order._id, status: e.target.value })}
-                          className="h-9 px-3 bg-white border border-black/15 text-sm text-bone outline-none capitalize focus:border-bone"
-                        >
-                          {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
-                        </select>
+                        <div className="flex flex-wrap justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => printOrderInvoice(order)}
+                            className="h-9 rounded-md border border-orange/30 bg-orange/10 px-3 text-xs font-medium uppercase tracking-[0.18em] text-orange transition hover:border-orange hover:bg-orange hover:text-white"
+                          >
+                            Print fature
+                          </button>
+                          <select
+                            value={order.status}
+                            onChange={(e) => updateStatus.mutate({ id: order._id, status: e.target.value })}
+                            className="h-9 px-3 bg-white border border-black/15 text-sm text-bone outline-none capitalize focus:border-bone"
+                          >
+                            {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
+                          </select>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -326,7 +615,7 @@ export default function Admin() {
                       </td>
                       <td className="px-6 py-4 text-right">
                         <button
-                          onClick={() => { if (confirm(`Delete "${p.title}"?`)) removeProduct.mutate(p._id); }}
+                          onClick={() => setProductToDelete(p)}
                           className="text-xs uppercase tracking-[0.22em] text-coral link-underline"
                         >
                           Delete
@@ -417,6 +706,44 @@ export default function Admin() {
           </div>
         )}
       </main>
+
+      {productToDelete && (
+        <div className="fixed inset-0 z-[80] grid place-items-center bg-navy/55 px-4 backdrop-blur-sm">
+          <div
+            className="w-full max-w-md rounded-lg border border-black/10 bg-white p-6 shadow-soft md:p-8"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-product-title"
+          >
+            <p className="section-mark mb-5">Delete product</p>
+            <h2 id="delete-product-title" className="kinetic text-2xl font-medium text-bone tracking-normal">
+              Remove "{productToDelete.title}"?
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-bone-300">
+              This product will be removed from the admin list and storefront catalogue.
+            </p>
+
+            <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={() => setProductToDelete(null)}
+                disabled={removeProduct.isPending}
+                className="h-11 rounded-md border border-black/15 px-5 text-sm font-medium text-bone transition hover:border-bone disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmDeleteProduct}
+                disabled={removeProduct.isPending}
+                className="h-11 rounded-md bg-coral px-5 text-sm font-medium text-white transition hover:bg-red-600 disabled:opacity-50"
+              >
+                {removeProduct.isPending ? 'Deleting...' : 'Delete product'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

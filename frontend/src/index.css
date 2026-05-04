@@ -73,7 +73,7 @@ em, i {
 }
 
 .magnetic { transition: transform .3s cubic-bezier(0.22,1,0.36,1); will-change: transform; }
-.magnetic > * { transition: transform .3s cubic-bezier(0.22,1,0.36,1); pointer-events: none; }
+.magnetic > * { transition: transform .3s cubic-bezier(0.22,1,0.36,1); pointer-events: auto; }
 
 .link-underline { position: relative; display: inline-block; }
 .link-underline::after {

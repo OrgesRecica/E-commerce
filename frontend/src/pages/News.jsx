@@ -10,7 +10,7 @@ const articles = [
     title: 'President Vjosa Osmani visits Scampa & Powerpack Kosovo.',
     excerpt: 'A step toward empowering women and promoting gender equality in industrial Kosovo.',
     body: 'The President\'s visit highlighted SCAMPA\'s ongoing commitment to creating equal opportunities in the workplace. As one of Kosovo\'s leading manufacturers, we take pride in our diverse workforce and our role in shaping a more inclusive industrial sector. Together with our Powerpack joint venture, we continue to invest in initiatives that empower women across all levels of our organization.',
-    img: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=2000&q=85',
+    img: '/assets/presidentja.jpg',
     featured: true,
   },
   {
@@ -29,7 +29,7 @@ const articles = [
     title: 'Brand to Brand — partnerships for a circular future.',
     excerpt: 'In a world of significant environmental challenges, partnerships supporting sustainability are critical.',
     body: 'The Brand to Brand initiative represents our commitment to working with partners across the value chain to drive sustainability forward. By collaborating with retailers, recycling facilities, and waste management companies, we\'re building a circular economy where every package has a second life.',
-    img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1400&q=85',
+    img: '/assets/brand-to-brand.png',
   },
 ];
 

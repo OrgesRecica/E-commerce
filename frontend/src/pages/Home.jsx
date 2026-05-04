@@ -5,7 +5,6 @@ import api from '../api/axios.js';
 import ProductCard from '../components/ProductCard.jsx';
 import Marquee from '../components/Marquee.jsx';
 import Magnetic from '../components/Magnetic.jsx';
-import FactoryHeroAnimation from '../components/FactoryHeroAnimation.jsx';
 import { useReveal } from '../hooks/useReveal.js';
 import { useCounter } from '../hooks/useCounter.js';
 
@@ -46,7 +45,7 @@ const news = [
     date: 'Dec - 2024',
     title: 'President Vjosa Osmani visits Scampa & Powerpack Kosovo.',
     excerpt: 'A step toward empowering women and promoting gender equality in industrial Kosovo.',
-    img: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=900&q=80',
+    img: '/assets/presidentja.jpg',
   },
   {
     tag: 'Innovation',
@@ -60,7 +59,7 @@ const news = [
     date: 'Dec - 2024',
     title: 'Brand to Brand - partnerships for a circular future.',
     excerpt: 'Working with retailers, recyclers, and waste management to close the loop.',
-    img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=900&q=80',
+    img: '/assets/brand-to-brand.png',
   },
 ];
 
@@ -217,8 +216,8 @@ export default function Home() {
       <section className="relative overflow-hidden bg-navy text-white pt-32 lg:pt-40 pb-16">
         <div className="absolute inset-0 dot-grid opacity-20" />
         <div className="absolute right-0 top-20 h-96 w-96 rounded-full bg-orange/20 blur-3xl" />
-        <div className="relative container mx-auto px-5 max-w-[88rem] grid lg:grid-cols-12 gap-6 items-center">
-          <div className="lg:col-span-6">
+        <div className="relative container mx-auto px-5 max-w-[88rem] grid lg:grid-cols-12 gap-10 items-center">
+          <div className="lg:col-span-6 py-4 lg:py-16">
             <div className="flex flex-wrap gap-3 mb-8 reveal">
               <span className="rounded-md bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.14em] font-medium text-white/75">Manufacturing & Trading Co.</span>
               <span className="rounded-md bg-orange px-3 py-1 text-xs uppercase tracking-[0.14em] font-medium text-white">Est. 1999</span>
@@ -238,8 +237,14 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="lg:col-span-6 reveal" data-effect="right">
-            <FactoryHeroAnimation />
+          <div className="relative lg:col-span-6 lg:self-stretch reveal" data-effect="right">
+            <div className="relative grid h-[24rem] place-items-center overflow-visible sm:h-[30rem] lg:h-full lg:min-h-[34rem]">
+              <img
+                src="/assets/scampa-hero-clay-transparent.png"
+                alt="Claymorphism SCAMPA packaging factory scene"
+                className="h-auto w-full max-w-[54rem] object-contain lg:max-w-[58rem] xl:max-w-[62rem]"
+              />
+            </div>
           </div>
         </div>
       </section>

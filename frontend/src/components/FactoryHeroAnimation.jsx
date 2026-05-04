@@ -167,13 +167,13 @@ function createFactoryScene(container) {
   scene.add(key);
 
   const cyanLight = new THREE.PointLight(0x00d9ff, 5.4, 5.5);
-  cyanLight.position.set(-2.95, 0.96, -0.34);
+  cyanLight.position.set(-2.95, 0.96, 0.34);
   root.add(cyanLight);
   const orangeLight = new THREE.PointLight(0xff6f00, 6.2, 5.2);
-  orangeLight.position.set(-0.35, 1.18, 0.4);
+  orangeLight.position.set(-0.35, 1.18, -0.4);
   root.add(orangeLight);
   const rightLight = new THREE.PointLight(0x00caff, 4.2, 4.6);
-  rightLight.position.set(2.08, 0.98, -0.36);
+  rightLight.position.set(2.08, 0.98, 0.36);
   root.add(rightLight);
 
   const glowOrange = makeGlowTexture('#ff7a1a');
@@ -195,69 +195,69 @@ function createFactoryScene(container) {
   };
 
   const leftMachine = makeRoundedBox(1.65, 1.15, 1.35, 0.16, mats.blue);
-  leftMachine.position.set(-3.04, 0.58, -0.34);
+  leftMachine.position.set(-3.04, 0.58, 0.34);
   leftMachine.rotation.y = Math.PI / 2;
   root.add(leftMachine);
 
   const mainMachine = makeRoundedBox(1.42, 1.82, 1.38, 0.16, mats.blue);
-  mainMachine.position.set(-0.35, 0.96, 0.4);
+  mainMachine.position.set(-0.35, 0.96, -0.4);
   mainMachine.rotation.y = Math.PI / 2;
   root.add(mainMachine);
 
   const rightMachine = makeRoundedBox(1.62, 1.25, 1.35, 0.16, mats.blue);
-  rightMachine.position.set(2.18, 0.6, -0.36);
+  rightMachine.position.set(2.18, 0.6, 0.36);
   rightMachine.rotation.y = Math.PI / 2;
   root.add(rightMachine);
 
   const sideControl = makeRoundedBox(0.62, 0.68, 0.54, 0.09, new THREE.MeshStandardMaterial({ color: 0x496fa9, roughness: 0.42 }));
-  sideControl.position.set(-1.68, 0.46, 1.0);
+  sideControl.position.set(-1.68, 0.46, -1.0);
   sideControl.rotation.y = Math.PI / 2;
   root.add(sideControl);
 
   const tray = makeRoundedBox(0.68, 0.08, 0.46, 0.04, new THREE.MeshStandardMaterial({ color: 0xeaf7ff, roughness: 0.28, metalness: 0.04 }));
-  tray.position.set(-2.55, 0.16, 0.98);
+  tray.position.set(-2.55, 0.16, -0.98);
   tray.rotation.y = Math.PI / 2;
   root.add(tray);
   const trayRim = makeRoundedBox(0.76, 0.08, 0.54, 0.04, mats.cyan);
-  trayRim.position.set(-2.55, 0.105, 0.98);
+  trayRim.position.set(-2.55, 0.105, -0.98);
   trayRim.rotation.y = Math.PI / 2;
   root.add(trayRim);
 
   const smallButton = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.08, 32), mats.glowOrange);
-  smallButton.position.set(-1.68, 0.86, 1.0);
+  smallButton.position.set(-1.68, 0.86, -1.0);
   smallButton.castShadow = true;
   root.add(smallButton);
-  addGlow(-1.68, 0.9, 1.0, 0.48, glowOrange, 0.34);
+  addGlow(-1.68, 0.9, -1.0, 0.48, glowOrange, 0.34);
 
   const warningMat = new THREE.MeshBasicMaterial({ color: 0xffdf35, side: THREE.DoubleSide });
   const triangle = new THREE.Mesh(new THREE.CircleGeometry(0.13, 3), warningMat);
-  triangle.position.set(0.36, 0.9, 1.28);
+  triangle.position.set(0.36, 0.9, -1.28);
   triangle.rotation.set(-0.2, Math.PI / 2, Math.PI / 6);
   root.add(triangle);
 
   const panel = makeRoundedBox(0.48, 0.42, 0.08, 0.04, mats.yellow);
-  panel.position.set(0.28, 0.42, 1.31);
+  panel.position.set(0.28, 0.42, -1.31);
   panel.rotation.y = Math.PI / 2;
   root.add(panel);
-  root.add(makeCylinderBetween(new THREE.Vector3(0.2, 0.48, 1.38), new THREE.Vector3(0.2, 0.28, 1.54), 0.025, mats.darkRail, 8));
-  root.add(makeCylinderBetween(new THREE.Vector3(0.4, 0.48, 1.38), new THREE.Vector3(0.4, 0.28, 1.54), 0.025, mats.darkRail, 8));
+  root.add(makeCylinderBetween(new THREE.Vector3(0.2, 0.48, -1.38), new THREE.Vector3(0.2, 0.28, -1.54), 0.025, mats.darkRail, 8));
+  root.add(makeCylinderBetween(new THREE.Vector3(0.4, 0.48, -1.38), new THREE.Vector3(0.4, 0.28, -1.54), 0.025, mats.darkRail, 8));
 
   const pipeMat = new THREE.MeshStandardMaterial({ color: 0xff9a1f, roughness: 0.42, metalness: 0.08 });
-  root.add(makeCylinderBetween(new THREE.Vector3(-1.0, 0.3, 1.13), new THREE.Vector3(-1.58, 0.3, 1.18), 0.055, pipeMat, 16));
-  root.add(makeCylinderBetween(new THREE.Vector3(-1.08, 0.28, 1.02), new THREE.Vector3(-1.54, 0.28, 0.84), 0.045, pipeMat, 16));
+  root.add(makeCylinderBetween(new THREE.Vector3(-1.0, 0.3, -1.13), new THREE.Vector3(-1.58, 0.3, -1.18), 0.055, pipeMat, 16));
+  root.add(makeCylinderBetween(new THREE.Vector3(-1.08, 0.28, -1.02), new THREE.Vector3(-1.54, 0.28, -0.84), 0.045, pipeMat, 16));
 
   for (let i = 0; i < 4; i += 1) {
     const vent = makeBox(0.12, 0.035, 0.48, mats.blueTop);
-    vent.position.set(-0.74 + i * 0.18, 1.94, 0.62);
+    vent.position.set(-0.74 + i * 0.18, 1.94, -0.62);
     vent.rotation.y = -0.22;
     root.add(vent);
   }
 
   const sideBoxes = [
-    [-3.66, -0.08, 0.12],
-    [-3.66, -0.08, -0.24],
-    [1.78, -0.1, 0.26],
-    [2.82, -0.1, 0.26],
+    [-3.66, -0.08, -0.12],
+    [-3.66, -0.08, 0.24],
+    [1.78, -0.1, -0.26],
+    [2.82, -0.1, -0.26],
   ];
   sideBoxes.forEach(([x, y, z], index) => {
     const foot = makeRoundedBox(0.22, 0.34, 0.2, 0.05, mats.blue);
@@ -280,9 +280,61 @@ function createFactoryScene(container) {
     addGlow(x - 0.08, y, z, 1.35 * scale, color === 0xff8b1a ? glowOrange : glowCyan, 0.48);
   };
 
-  makeDoor(-3.06, 0.38, -0.34, 0x00e5ff, 0.86);
-  makeDoor(-0.97, 0.62, 0.4, 0xff8b1a, 1.12);
-  makeDoor(2.18, 0.4, -0.36, 0x00d9ff, 0.88);
+  makeDoor(-3.06, 0.38, 0.34, 0x00e5ff, 0.86);
+  makeDoor(-0.97, 0.62, -0.4, 0xff8b1a, 1.12);
+  makeDoor(2.18, 0.4, 0.36, 0x00d9ff, 0.88);
+
+  const makeConveyorPortal = (x, y, z, rotationY, width = 0.78, height = 0.58, texture = glowCyan) => {
+    const group = new THREE.Group();
+    group.position.set(x, y, z);
+    group.rotation.y = rotationY;
+
+    const recess = makeRoundedBox(width, height, 0.08, 0.055, mats.black);
+    recess.position.z = -0.025;
+    group.add(recess);
+
+    const backGlow = new THREE.Mesh(
+      new THREE.PlaneGeometry(width * 0.72, height * 0.58),
+      new THREE.MeshBasicMaterial({
+        color: texture === glowOrange ? 0xff8b1a : 0x00d9ff,
+        transparent: true,
+        opacity: 0.24,
+        side: THREE.DoubleSide,
+      })
+    );
+    backGlow.position.z = 0.026;
+    group.add(backGlow);
+
+    const topRail = makeRoundedBox(width + 0.18, 0.11, 0.16, 0.035, mats.orange);
+    topRail.position.y = height / 2 + 0.04;
+    group.add(topRail);
+
+    [-1, 1].forEach((side) => {
+      const rail = makeRoundedBox(0.11, height + 0.1, 0.16, 0.035, mats.orange);
+      rail.position.x = side * (width / 2 + 0.04);
+      group.add(rail);
+    });
+
+    for (let i = 0; i < 5; i += 1) {
+      const strip = makeBox(0.075, 0.26, 0.035, mats.darkRail);
+      strip.position.set(-width * 0.32 + i * width * 0.16, height * 0.12, 0.055);
+      group.add(strip);
+    }
+
+    const roller = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, width * 0.82, 18), mats.rail);
+    roller.rotation.z = Math.PI / 2;
+    roller.position.set(0, -height * 0.28, 0.075);
+    roller.castShadow = true;
+    group.add(roller);
+
+    root.add(group);
+    addGlow(x, y + 0.06, z, width * 0.95, texture, 0.24);
+  };
+
+  makeConveyorPortal(-2.55, 0.45, 0.36, Math.PI / 2, 0.72, 0.52, glowCyan);
+  makeConveyorPortal(-0.72, 0.5, -0.96, 0, 0.82, 0.56, glowOrange);
+  makeConveyorPortal(0.28, 0.48, 0.34, 0, 0.82, 0.54, glowOrange);
+  makeConveyorPortal(1.76, 0.44, 0.58, Math.PI / 2, 0.72, 0.52, glowCyan);
 
   const fans = [];
   const makeFan = (x, z, y = 1.32) => {
@@ -302,8 +354,8 @@ function createFactoryScene(container) {
     root.add(group);
     fans.push(group);
   };
-  makeFan(-3.04, -0.34, 1.2);
-  makeFan(2.18, -0.36, 1.22);
+  makeFan(-3.04, 0.34, 1.2);
+  makeFan(2.18, 0.36, 1.22);
 
   const beacons = [];
   const makeBeacon = (x, z, delay = 0) => {
@@ -321,20 +373,20 @@ function createFactoryScene(container) {
     root.add(group);
     beacons.push({ group, light, cap, delay });
   };
-  makeBeacon(-0.66, 0.04, 0);
-  makeBeacon(-0.06, 0.04, 0.6);
+  makeBeacon(-0.66, -0.04, 0);
+  makeBeacon(-0.06, -0.04, 0.6);
 
   const beltCurve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(-3.42, 0.18, -0.34),
-    new THREE.Vector3(-2.62, 0.18, -0.36),
-    new THREE.Vector3(-1.9, 0.2, 0.04),
-    new THREE.Vector3(-1.62, 0.22, 0.88),
-    new THREE.Vector3(-0.76, 0.24, 0.92),
-    new THREE.Vector3(-0.22, 0.24, 0.4),
-    new THREE.Vector3(0.36, 0.22, -0.34),
-    new THREE.Vector3(1.2, 0.2, -0.62),
-    new THREE.Vector3(1.82, 0.18, -0.58),
-    new THREE.Vector3(2.38, 0.18, -0.08),
+    new THREE.Vector3(-3.42, 0.18, 0.34),
+    new THREE.Vector3(-2.62, 0.18, 0.36),
+    new THREE.Vector3(-1.9, 0.2, -0.04),
+    new THREE.Vector3(-1.62, 0.22, -0.88),
+    new THREE.Vector3(-0.76, 0.24, -0.92),
+    new THREE.Vector3(-0.22, 0.24, -0.4),
+    new THREE.Vector3(0.36, 0.22, 0.34),
+    new THREE.Vector3(1.2, 0.2, 0.62),
+    new THREE.Vector3(1.82, 0.18, 0.58),
+    new THREE.Vector3(2.38, 0.18, 0.08),
   ], false, 'centripetal', 0.45);
   const path = beltCurve.getPoints(32);
 
@@ -436,12 +488,12 @@ function createFactoryScene(container) {
     return { group, eyeLeft, eyeRight, delay };
   };
   const robots = [
-    makeRobot(-1.85, -0.95, 0),
-    makeRobot(2.58, 0.78, 1.2),
+    makeRobot(-1.85, 0.95, 0),
+    makeRobot(2.58, -0.78, 1.2),
   ];
 
-  root.add(makeCylinderBetween(new THREE.Vector3(2.78, 0.52, 0.8), new THREE.Vector3(3.08, 0.46, 0.54), 0.018, mats.rail, 8));
-  root.add(makeCylinderBetween(new THREE.Vector3(3.08, 0.46, 0.54), new THREE.Vector3(3.12, 0.38, 0.3), 0.018, mats.rail, 8));
+  root.add(makeCylinderBetween(new THREE.Vector3(2.78, 0.52, -0.8), new THREE.Vector3(3.08, 0.46, -0.54), 0.018, mats.rail, 8));
+  root.add(makeCylinderBetween(new THREE.Vector3(3.08, 0.46, -0.54), new THREE.Vector3(3.12, 0.38, -0.3), 0.018, mats.rail, 8));
 
   const lowerBelt = makeBox(1.5, 0.24, 0.48, mats.black);
   lowerBelt.position.set(-0.9, 0.12, 2.0);

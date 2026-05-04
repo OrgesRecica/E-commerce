@@ -115,8 +115,13 @@ export async function deleteProduct(req, res, next) {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) return res.status(404).json({ message: 'Product not found' });
-    await Promise.all((product.images || []).map((img) => destroyAsset(img.publicId)));
-    res.json({ ok: true });
+
+    const cleanup = await Promise.allSettled(
+      (product.images || []).map((img) => destroyAsset(img.publicId))
+    );
+    const cleanupFailed = cleanup.some((result) => result.status === 'rejected');
+
+    res.json({ ok: true, cleanupFailed });
   } catch (err) {
     next(err);
   }
