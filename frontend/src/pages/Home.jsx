@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../api/axios.js';
 import ProductCard from '../components/ProductCard.jsx';
@@ -73,6 +73,115 @@ function Stat({ to, label, suffix = '+', prefix = '' }) {
         {prefix}{v}{suffix}
       </div>
       <p className="mt-3 text-xs uppercase tracking-[0.14em] text-muted font-medium">{label}</p>
+    </div>
+  );
+}
+
+function HeroVideoFrame() {
+  const [playing, setPlaying] = useState(false);
+  const [seconds, setSeconds] = useState(0);
+  const duration = 19;
+  const progress = Math.max(8, Math.min(100, (seconds / duration) * 100));
+  const formatted = `00:${String(seconds).padStart(2, '0')}`;
+
+  useEffect(() => {
+    if (!playing) return undefined;
+    const interval = window.setInterval(() => {
+      setSeconds((value) => (value >= duration ? 0 : value + 1));
+    }, 1000);
+    return () => window.clearInterval(interval);
+  }, [playing]);
+
+  const togglePlayback = () => {
+    setPlaying((value) => {
+      if (!value && seconds >= duration) setSeconds(0);
+      return !value;
+    });
+  };
+
+  return (
+    <div className="relative mx-auto w-full max-w-[43rem] lg:max-w-[48rem]">
+      <div className={`hero-reel relative overflow-hidden rounded-lg border border-white/14 bg-navy-900 shadow-[0_34px_90px_-42px_rgba(0,0,0,0.72)] ${playing ? 'is-playing' : ''}`}>
+        <div className="flex h-11 items-center justify-end border-b border-white/10 bg-white/8 px-4">
+          <div className="flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/54">
+            <span>SCAMPA</span>
+            <span className="hidden sm:inline">Production reel</span>
+          </div>
+        </div>
+
+        <div className="hero-reel__scene relative aspect-[16/9] overflow-hidden bg-[radial-gradient(circle_at_24%_20%,rgba(255,122,26,0.22),transparent_30%),linear-gradient(135deg,#082b5f_0%,#061f49_48%,#f4f8ff_100%)]">
+          <div className="absolute inset-x-0 top-0 z-[2] h-px bg-gradient-to-r from-transparent via-white/55 to-transparent" />
+          <div className="hero-reel__scan absolute inset-0 z-[1] bg-[linear-gradient(rgba(255,255,255,0.055)_1px,transparent_1px)] bg-[length:100%_12px] opacity-45" />
+          <div className="absolute left-4 top-4 z-[3] rounded-md border border-white/14 bg-navy/72 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/72 backdrop-blur">
+            {formatted}
+          </div>
+          <div className="hero-reel__pulse absolute right-4 top-4 z-[3] flex items-center gap-2 rounded-md border border-white/14 bg-navy/72 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/72 backdrop-blur">
+            <span className="h-1.5 w-3 rounded-full bg-orange" />
+            <span>{playing ? 'Rolling' : 'Ready'}</span>
+          </div>
+
+          <img
+            src="/assets/hero-v2/factory-stage.png"
+            alt="Claymorphism SCAMPA factory stage with conveyor belt"
+            className="hero-reel__asset absolute inset-0 z-[2] h-full w-full object-cover"
+          />
+
+          <div className="hero-reel__motion-layer" aria-hidden="true">
+            <img className="hero-reel__sprite hero-reel__sprite--blue-bag" src="/assets/hero-v2/blue-recycle-bag.png" alt="" />
+            <img className="hero-reel__sprite hero-reel__sprite--white-bag" src="/assets/hero-v2/white-recycle-bag.png" alt="" />
+            <img className="hero-reel__sprite hero-reel__sprite--folded" src="/assets/hero-v2/folded-bags.png" alt="" />
+          </div>
+
+          <div className="hero-reel__facts" aria-hidden="true">
+            <span>100% recycled materials</span>
+            <span>Exported across the EU</span>
+            <span>Premium flexible packaging</span>
+          </div>
+
+          <div className="absolute inset-0 z-[3] pointer-events-none bg-gradient-to-t from-navy/60 via-transparent to-transparent" />
+          <button
+            type="button"
+            onClick={togglePlayback}
+            className={`hero-reel__center absolute inset-0 z-[4] m-auto grid h-16 w-16 place-items-center rounded-full border border-white/22 bg-white/16 text-white shadow-glow backdrop-blur transition sm:h-20 sm:w-20 ${playing ? 'opacity-0 hover:opacity-100 focus:opacity-100' : 'opacity-100'}`}
+            aria-label={playing ? 'Pause production reel' : 'Play production reel'}
+          >
+            {playing ? (
+              <span className="flex items-center gap-1.5" aria-hidden="true">
+                <span className="h-6 w-2 rounded-sm bg-current" />
+                <span className="h-6 w-2 rounded-sm bg-current" />
+              </span>
+            ) : (
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M8 5.8v12.4c0 .8.9 1.3 1.6.9l9.7-6.2c.6-.4.6-1.4 0-1.8L9.6 4.9C8.9 4.5 8 5 8 5.8Z" />
+              </svg>
+            )}
+          </button>
+        </div>
+
+        <div className="flex h-14 items-center gap-4 border-t border-white/10 bg-navy-900 px-4">
+          <button
+            type="button"
+            onClick={togglePlayback}
+            className="grid h-9 w-9 place-items-center rounded-md border border-white/12 bg-white/8 text-white transition hover:border-orange hover:text-orange"
+            aria-label={playing ? 'Pause production reel' : 'Play production reel'}
+          >
+            {playing ? (
+              <span className="flex items-center gap-1" aria-hidden="true">
+                <span className="h-3.5 w-1 rounded-sm bg-current" />
+                <span className="h-3.5 w-1 rounded-sm bg-current" />
+              </span>
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M8 5.8v12.4c0 .8.9 1.3 1.6.9l9.7-6.2c.6-.4.6-1.4 0-1.8L9.6 4.9C8.9 4.5 8 5 8 5.8Z" />
+              </svg>
+            )}
+          </button>
+          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/12">
+            <div className="h-full rounded-full bg-orange transition-[width] duration-300" style={{ width: `${progress}%` }} />
+          </div>
+          <span className="text-xs font-medium tabular text-white/58">{formatted}</span>
+        </div>
+      </div>
     </div>
   );
 }
@@ -238,12 +347,8 @@ export default function Home() {
           </div>
 
           <div className="relative lg:col-span-6 lg:self-stretch reveal" data-effect="right">
-            <div className="relative grid h-[24rem] place-items-center overflow-visible sm:h-[30rem] lg:h-full lg:min-h-[34rem]">
-              <img
-                src="/assets/scampa-hero-clay-transparent.png"
-                alt="Claymorphism SCAMPA packaging factory scene"
-                className="h-auto w-full max-w-[54rem] object-contain lg:max-w-[58rem] xl:max-w-[62rem]"
-              />
+            <div className="relative grid min-h-[25rem] place-items-center sm:min-h-[31rem] lg:h-full lg:min-h-[34rem]">
+              <HeroVideoFrame />
             </div>
           </div>
         </div>

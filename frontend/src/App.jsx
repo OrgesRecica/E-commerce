@@ -1,5 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import api from './api/axios.js';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
 import ScrollProgress from './components/ScrollProgress.jsx';
@@ -16,10 +18,30 @@ import Admin from './pages/Admin.jsx';
 import Checkout from './pages/Checkout.jsx';
 import OrderSuccess from './pages/OrderSuccess.jsx';
 import { useReveal, useScrollProgress } from './hooks/useReveal.js';
+import { clearAuth, setAuthLoading, setCredentials } from './store/authSlice.js';
 
 export default function App() {
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
   useEffect(() => window.scrollTo(0, 0), [pathname]);
+  useEffect(() => {
+    let active = true;
+    dispatch(setAuthLoading());
+    api.get('/auth/me')
+      .then(({ data }) => {
+        if (active) dispatch(setCredentials(data));
+      })
+      .catch(() => {
+        if (active) dispatch(clearAuth());
+      });
+
+    const onExpired = () => dispatch(clearAuth());
+    window.addEventListener('auth:expired', onExpired);
+    return () => {
+      active = false;
+      window.removeEventListener('auth:expired', onExpired);
+    };
+  }, [dispatch]);
   useReveal();
   useScrollProgress();
 

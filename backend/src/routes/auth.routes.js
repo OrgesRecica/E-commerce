@@ -1,21 +1,28 @@
 import { Router } from 'express';
-import { body } from 'express-validator';
-import { register, login, me } from '../controllers/auth.controller.js';
+import {
+  csrf,
+  login,
+  logout,
+  me,
+  refresh,
+  register,
+  resendVerification,
+  verifyEmail,
+} from '../controllers/auth.controller.js';
 import { requireAuth } from '../middleware/auth.js';
-import { validate } from '../middleware/validate.js';
+import { authMutationRateLimiter, loginRateLimiter } from '../middleware/rateLimit.js';
+import { validateSchema } from '../middleware/validate.js';
+import { loginSchema, registerSchema, verifyEmailSchema } from '../validations/schemas.js';
 
 const router = Router();
 
-router.post(
-  '/register',
-  body('name').isString().trim().notEmpty(),
-  body('email').isEmail(),
-  body('password').isLength({ min: 6 }),
-  validate,
-  register
-);
-
-router.post('/login', body('email').isEmail(), body('password').notEmpty(), validate, login);
+router.get('/csrf', csrf);
+router.post('/register', authMutationRateLimiter, validateSchema(registerSchema), register);
+router.post('/login', loginRateLimiter, validateSchema(loginSchema), login);
+router.post('/refresh', refresh);
+router.post('/logout', logout);
 router.get('/me', requireAuth, me);
+router.get('/verify-email/:token', validateSchema(verifyEmailSchema), verifyEmail);
+router.post('/resend-verification', requireAuth, resendVerification);
 
 export default router;

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../store/authSlice.js';
+import api from '../api/axios.js';
+import { clearAuth } from '../store/authSlice.js';
 import Logo from './Logo.jsx';
 
 const links = [
@@ -104,8 +105,12 @@ export default function Navbar() {
   }, [open]);
 
   const closeMenu = () => setOpen(false);
-  const handleLogout = () => {
-    dispatch(logout());
+  const handleLogout = async () => {
+    try {
+      await api.post('/auth/logout');
+    } finally {
+      dispatch(clearAuth());
+    }
     closeMenu();
   };
 

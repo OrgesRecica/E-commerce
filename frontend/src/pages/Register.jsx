@@ -64,9 +64,9 @@ export default function Register() {
               />
             </label>
             <label className="block">
-              <span className="text-xs uppercase tracking-[0.22em] text-muted">Password — min. 6</span>
+              <span className="text-xs uppercase tracking-[0.22em] text-muted">Password - min. 12</span>
               <input
-                required type="password" minLength={6} value={form.password}
+                required type="password" minLength={12} value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 className="mt-3 w-full h-12 bg-transparent border-b border-black/15 focus:border-bone outline-none text-bone"
               />

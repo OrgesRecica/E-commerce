@@ -5,16 +5,25 @@ import User from '../models/User.js';
 export async function createOrder(req, res, next) {
   try {
     const { items, shippingAddress } = req.body;
-    const productIds = items.map((i) => i.product);
+    const requested = new Map();
+    for (const item of items) {
+      const id = String(item.product);
+      requested.set(id, (requested.get(id) || 0) + item.quantity);
+    }
+    const productIds = [...requested.keys()];
     const products = await Product.find({ _id: { $in: productIds } });
     const priceMap = new Map(products.map((p) => [String(p._id), p]));
 
     let total = 0;
-    const enriched = items.map((i) => {
-      const p = priceMap.get(String(i.product));
+    const enriched = productIds.map((id) => {
+      const p = priceMap.get(id);
       if (!p) throw Object.assign(new Error('Invalid product'), { status: 400 });
-      total += p.price * i.quantity;
-      return { product: p._id, title: p.title, price: p.price, quantity: i.quantity };
+      const quantity = requested.get(id);
+      if (p.stock < quantity) {
+        throw Object.assign(new Error(`Not enough stock for ${p.title}`), { status: 409 });
+      }
+      total += p.price * quantity;
+      return { product: p._id, title: p.title, price: p.price, quantity };
     });
 
     const order = await Order.create({
@@ -52,7 +61,11 @@ export async function listAllOrders(req, res, next) {
 export async function updateOrderStatus(req, res, next) {
   try {
     const { status } = req.body;
-    const order = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true });
+    const order = await Order.findByIdAndUpdate(
+      req.params.id,
+      { $set: { status } },
+      { new: true, runValidators: true }
+    );
     if (!order) return res.status(404).json({ message: 'Order not found' });
     res.json(order);
   } catch (err) {

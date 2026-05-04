@@ -59,7 +59,7 @@ const escapeHtml = (value) => String(value ?? '')
 const invoiceNumber = (order) => `SC-${new Date(order.createdAt).getFullYear()}-${order._id.slice(-8).toUpperCase()}`;
 
 export default function Admin() {
-  const { user } = useSelector((s) => s.auth);
+  const { user, status } = useSelector((s) => s.auth);
   const qc = useQueryClient();
   const [tab, setTab] = useState('overview');
   const [form, setForm] = useState(EMPTY);
@@ -68,6 +68,13 @@ export default function Admin() {
   const [createStatus, setCreateStatus] = useState(null);
   const [productToDelete, setProductToDelete] = useState(null);
 
+  if (status === 'loading') {
+    return (
+      <div className="page-top pb-32 text-center">
+        <div className="w-10 h-10 border border-bone border-t-transparent rounded-full animate-spin mx-auto" />
+      </div>
+    );
+  }
   if (!user) return <Navigate to="/login" replace />;
   if (user.role !== 'admin') return <Navigate to="/" replace />;
 

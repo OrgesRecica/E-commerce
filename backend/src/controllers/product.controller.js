@@ -35,12 +35,12 @@ export async function listProducts(req, res, next) {
     if (featured === 'true') filter.featured = true;
     if (q) filter.$text = { $search: q };
     const sortOrder = SORT_MAP[sort] || SORT_MAP.new;
-    const skip = (Number(page) - 1) * Number(limit);
+    const skip = (page - 1) * limit;
     const [items, total] = await Promise.all([
-      Product.find(filter).skip(skip).limit(Number(limit)).sort(sortOrder),
+      Product.find(filter).skip(skip).limit(limit).sort(sortOrder),
       Product.countDocuments(filter),
     ]);
-    res.json({ items, total, page: Number(page), limit: Number(limit) });
+    res.json({ items, total, page, limit });
   } catch (err) {
     next(err);
   }
@@ -59,17 +59,10 @@ export async function getProduct(req, res, next) {
 export async function createProduct(req, res, next) {
   try {
     const files = req.files || [];
-    const title = String(req.body.title ?? req.body.name ?? '').trim();
-    const description = String(req.body.description ?? '').trim();
-    const category = String(req.body.category ?? '').trim().toLowerCase();
-    const price = Number(req.body.price);
-
-    if (!title) return res.status(400).json({ message: 'Name is required' });
-    if (!description) return res.status(400).json({ message: 'Description is required' });
-    if (!category) return res.status(400).json({ message: 'Category is required' });
-    if (!Number.isFinite(price) || price < 0) {
-      return res.status(400).json({ message: 'Price must be a non-negative number' });
-    }
+    const title = String(req.body.title ?? req.body.name).trim();
+    const description = req.body.description;
+    const category = req.body.category.toLowerCase();
+    const price = req.body.price;
     if (!files.length) return res.status(400).json({ message: 'At least one image is required' });
 
     const uploads = await Promise.all(
@@ -77,15 +70,14 @@ export async function createProduct(req, res, next) {
     );
 
     const slug = await uniqueSlug(slugify(title));
-    const stock = Number(req.body.stock);
     const product = await Product.create({
       title,
       slug,
       description,
       category,
       price,
-      stock: Number.isFinite(stock) ? stock : 1,
-      featured: req.body.featured === 'true' || req.body.featured === true,
+      stock: req.body.stock,
+      featured: req.body.featured,
       images: uploads,
     });
     res.status(201).json(product);
@@ -96,14 +88,16 @@ export async function createProduct(req, res, next) {
 
 export async function updateProduct(req, res, next) {
   try {
-    const update = { ...req.body };
-    if (update.name && !update.title) {
-      update.title = update.name;
-      delete update.name;
-    }
-    if (update.category) update.category = String(update.category).toLowerCase();
-    if (update.price != null) update.price = Number(update.price);
-    const product = await Product.findByIdAndUpdate(req.params.id, update, { new: true });
+    const { name, ...rest } = req.body;
+    const update = { ...rest };
+    if (name && !update.title) update.title = name;
+    if (update.category) update.category = update.category.toLowerCase();
+
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { $set: update },
+      { new: true, runValidators: true }
+    );
     if (!product) return res.status(404).json({ message: 'Product not found' });
     res.json(product);
   } catch (err) {

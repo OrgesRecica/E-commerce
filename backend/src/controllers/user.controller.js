@@ -12,10 +12,13 @@ export async function listUsers(_req, res, next) {
 export async function updateMe(req, res, next) {
   try {
     const { name, address } = req.body;
+    const update = {};
+    if (name) update.name = name;
+    if (address) update.address = address;
     const user = await User.findByIdAndUpdate(
       req.user.id,
-      { $set: { name, address } },
-      { new: true }
+      { $set: update },
+      { new: true, runValidators: true }
     );
     res.json(user);
   } catch (err) {

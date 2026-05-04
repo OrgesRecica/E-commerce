@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 const orderItemSchema = new mongoose.Schema(
   {
     product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
-    title: String,
-    price: Number,
+    title: { type: String, trim: true, maxlength: 140 },
+    price: { type: Number, required: true, min: 0 },
     quantity: { type: Number, required: true, min: 1 },
   },
   { _id: false }
@@ -21,17 +21,17 @@ const orderSchema = new mongoose.Schema(
       default: 'pending',
     },
     shippingAddress: {
-      fullName: String,
-      email: String,
-      phone: String,
-      line1: String,
-      city: String,
-      postalCode: String,
-      country: String,
+      fullName: { type: String, trim: true, maxlength: 100 },
+      email: { type: String, trim: true, lowercase: true, maxlength: 254 },
+      phone: { type: String, trim: true, maxlength: 40 },
+      line1: { type: String, trim: true, maxlength: 160 },
+      city: { type: String, trim: true, maxlength: 80 },
+      postalCode: { type: String, trim: true, maxlength: 32 },
+      country: { type: String, trim: true, maxlength: 80 },
     },
-    paymentIntentId: String,
+    paymentIntentId: { type: String, index: true },
   },
-  { timestamps: true }
+  { timestamps: true, strict: 'throw' }
 );
 
 export default mongoose.model('Order', orderSchema);

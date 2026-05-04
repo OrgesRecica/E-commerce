@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useLocation, Link, Navigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { clear } from '../store/cartSlice.js';
@@ -87,11 +87,22 @@ function PaymentForm({ total }) {
 
 export default function Checkout() {
   const { state } = useLocation();
+  const { user, status } = useSelector((s) => s.auth);
   const [step, setStep] = useState(1);
   const [details, setDetails] = useState(EMPTY_DETAILS);
   const [clientSecret, setClientSecret] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  if (status === 'loading') {
+    return (
+      <div className="page-top pb-32 text-center">
+        <div className="w-10 h-10 border border-bone border-t-transparent rounded-full animate-spin mx-auto" />
+      </div>
+    );
+  }
+
+  if (!user) return <Navigate to="/login" replace />;
 
   if (!state?.items?.length) {
     return (

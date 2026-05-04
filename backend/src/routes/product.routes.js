@@ -8,14 +8,29 @@ import {
 } from '../controllers/product.controller.js';
 import { requireAuth, requireAdmin } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
+import { validateSchema } from '../middleware/validate.js';
+import {
+  createProductSchema,
+  listProductsSchema,
+  productIdSchema,
+  productSlugSchema,
+  updateProductSchema,
+} from '../validations/schemas.js';
 
 const router = Router();
 
-router.get('/', listProducts);
-router.get('/:slug', getProduct);
+router.get('/', validateSchema(listProductsSchema), listProducts);
+router.get('/:slug', validateSchema(productSlugSchema), getProduct);
 
-router.post('/', requireAuth, requireAdmin, upload.array('images', 5), createProduct);
-router.put('/:id', requireAuth, requireAdmin, updateProduct);
-router.delete('/:id', requireAuth, requireAdmin, deleteProduct);
+router.post(
+  '/',
+  requireAuth,
+  requireAdmin,
+  upload.array('images', 5),
+  validateSchema(createProductSchema),
+  createProduct
+);
+router.put('/:id', requireAuth, requireAdmin, validateSchema(updateProductSchema), updateProduct);
+router.delete('/:id', requireAuth, requireAdmin, validateSchema(productIdSchema), deleteProduct);
 
 export default router;

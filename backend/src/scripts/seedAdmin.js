@@ -24,12 +24,14 @@ if (!user) {
     name: ADMIN_NAME || 'Store Admin',
     email: ADMIN_EMAIL.toLowerCase(),
     role: 'admin',
+    emailVerified: true,
   });
   await user.setPassword(ADMIN_PASSWORD);
   await user.save();
   console.log(`Admin created: ${user.email}`);
 } else {
   user.role = 'admin';
+  user.emailVerified = true;
   if (ADMIN_NAME) user.name = ADMIN_NAME;
   await user.setPassword(ADMIN_PASSWORD);
   await user.save();
