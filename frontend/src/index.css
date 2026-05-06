@@ -206,21 +206,21 @@ em, i {
 }
 
 .hero-reel__sprite--blue-bag {
-  left: 2%;
+  left: -2.5%;
   top: 58%;
   width: clamp(5.2rem, 14vw, 8.6rem);
   z-index: 2;
 }
 
 .hero-reel__sprite--white-bag {
-  left: 14%;
+  left: 9.5%;
   top: 61%;
   width: clamp(3.6rem, 10vw, 6.2rem);
   z-index: 3;
 }
 
 .hero-reel__sprite--folded {
-  left: 2%;
+  left: -2.5%;
   top: 76%;
   width: clamp(6.2rem, 16vw, 9.8rem);
   z-index: 5;
@@ -352,7 +352,7 @@ em, i {
 
 .hero-reel.is-playing .hero-reel__facts::before,
 .hero-reel.is-playing .hero-reel__facts::after {
-  animation: hero-reel-thought-dot 4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  animation: hero-reel-thought-dot 4s cubic-bezier(0.22, 1, 0.36, 1) infinite both;
 }
 
 .hero-reel.is-playing .hero-reel__facts::after {
@@ -432,9 +432,10 @@ em, i {
 }
 
 @keyframes hero-reel-thought-dot {
-  0%, 7% { opacity: 0; transform: translate3d(-0.18rem, 0.42rem, 0) scale(0.76); }
-  12%, 24% { opacity: 0.82; transform: translate3d(0, 0, 0) scale(1); }
-  30%, 100% { opacity: 0; transform: translate3d(0.16rem, -0.38rem, 0) scale(0.78); }
+  0%, 6% { opacity: 0; transform: translate3d(-0.18rem, 0.42rem, 0) scale(0.72); }
+  12%, 58% { opacity: 0.86; transform: translate3d(0, 0, 0) scale(1); }
+  72% { opacity: 0.55; transform: translate3d(0.08rem, -0.14rem, 0) scale(0.92); }
+  86%, 100% { opacity: 0; transform: translate3d(0.16rem, -0.34rem, 0) scale(0.76); }
 }
 
 @keyframes hero-reel-record {
